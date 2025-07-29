@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Driven Credit Scoring | Expanding Financial Access</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 50%, #2d1b69 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(147, 51, 234, 0.1) 0%, transparent 70%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(0.5deg); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            position: relative;
+            max-width: 1200px;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #c084fc, #f472b6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.3)); }
+            to { filter: drop-shadow(0 0 30px rgba(192, 132, 252, 0.5)); }
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .project-summary {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.1));
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 900px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-summary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .project-summary p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #f1f5f9;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-summary strong {
+            color: #22c55e;
+            font-weight: 600;
+        
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(96, 165, 250, 0.3);
+            box-shadow: 0 20px 40px rgba(96, 165, 250, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #60a5fa;
+            display: block;
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #ffffff, #cbd5e1);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .process-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .process-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .process-number {
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .process-card h3 {
+            color: #f1f5f9;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(5px);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin-bottom: 1rem;
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #f1f5f9;
+            text-align: center;
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.1));
+            border-left: 4px solid #22c55e;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .insight-box h4 {
+            color: #22c55e;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .workflow-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+            gap: 1rem;
+        }
+
+        .workflow-step {
+            background: linear-gradient(145deg, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2));
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .workflow-step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(147, 51, 234, 0.2);
+        }
+
+        .workflow-step::after {
+            content: '→';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #60a5fa;
+        }
+
+        .workflow-step:last-child::after {
+            display: none;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .tech-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tech-badge:hover {
+            background: rgba(96, 165, 250, 0.1);
+            border-color: rgba(96, 165, 250, 0.3);
+            transform: scale(1.05);
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(59, 130, 246, 0.1));
+            border-radius: 24px;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin: 4rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 0.5rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section {
+                padding: 3rem 1rem;
+            }
+            
+            .workflow-diagram {
+                flex-direction: column;
+            }
+            
+            .workflow-step::after {
+                content: '↓';
+                right: 50%;
+                transform: translateX(50%);
+                top: auto;
+                bottom: -15px;
+            }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>AI-Driven Credit Scoring</h1>
+            <p>Revolutionizing financial access for underserved SMEs through alternative data and ethical AI</p>
+            
+            <div class="project-summary">
+                <p><strong>"My AI credit scoring model increased SME loan approvals by 38% while maintaining portfolio quality. This translated to $2.3M additional lending volume monthly, with 22% lower default rates. The 99.7% faster decision time reduced operational costs by $180K annually while expanding financial access to 15,000+ previously underserved businesses."</strong></p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">+38%</span>
+                    <span class="stat-label">Approval Rate Increase</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">10min</span>
+                    <span class="stat-label">Decision Time (from 3 days)</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">+22%</span>
+                    <span class="stat-label">Portfolio Quality Improvement</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">15K+</span>
+                    <span class="stat-label">SMEs Evaluated</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem & Solution -->
+    <section class="section animate-on-scroll">
+        <h2 class="section-title">The Challenge</h2>
+        <div class="process-grid">
+            <div class="process-card">
+                <div class="process-number">!</div>
+                <h3>Limited Credit History</h3>
+                <p>70% of SMEs in emerging markets lack formal credit records, making traditional scoring models ineffective for assessing creditworthiness.</p>
+            </div>
+            <div class="process-card">
+                <div class="process-number">⚡</div>
+                <h3>Slow Decision Making</h3>
+                <p>Manual underwriting processes take 3-7 days, causing viable businesses to seek alternative (often expensive) funding sources.</p>
+            </div>
+            <div class="process-card">
+                <div class="process-number">🚫</div>
+                <h3>Financial Exclusion</h3>
+                <p>Women and youth-led businesses in rural areas face disproportionate barriers to accessing formal financial services.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Sources & Model -->
+    <section class="section animate-on-scroll">
+        <h2 class="section-title">Alternative Data Integration</h2>
+        
+        <div class="chart-container">
+            <div class="chart-title">Data Sources Contributing to Credit Score</div>
+            <div class="chart-wrapper">
+                <canvas id="dataSourceChart"></canvas>
+            </div>
+            <div class="insight-box">
+                <h4>Key Insight:</h4>
+                <p>Mobile money transactions proved to be the strongest predictor of repayment behavior, accounting for 35% of the model's predictive power. This validates the importance of alternative data in underserved markets.</p>
+            </div>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="chart-container">
+                <div class="chart-title">Model Performance Metrics</div>
+                <div class="chart-wrapper">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">Risk Distribution by Score Range</div>
+                <div class="chart-wrapper">
+                    <canvas id="riskChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Process -->
+    <section class="section animate-on-scroll">
+        <h2 class="section-title">AI Scoring Workflow</h2>
+        
+        <div class="workflow-diagram">
+            <div class="workflow-step">
+                <h4>Application</h4>
+                <p>SME applies via partner app</p>
+            </div>
+            <div class="workflow-step">
+                <h4>Data Pull</h4>
+                <p>Consent-based data aggregation</p>
+            </div>
+            <div class="workflow-step">
+                <h4>AI Analysis</h4>
+                <p>Real-time score generation</p>
+            </div>
+            <div class="workflow-step">
+                <h4>Decision</h4>
+                <p>Instant approval/review flag</p>
+            </div>
+            <div class="workflow-step">
+                <h4>Disbursement</h4>
+                <p>Tailored terms & limits</p>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Processing Time Comparison</div>
+            <div class="chart-wrapper">
+                <canvas id="timeChart"></canvas>
+            </div>
+            <div class="insight-box">
+                <h4>Efficiency Breakthrough:</h4>
+                <p>The AI model processes complete credit assessments in under 10 minutes, compared to traditional methods requiring 3+ days. This 99.7% time reduction enables same-day lending decisions.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact & Results -->
+    <section class="section animate-on-scroll">
+        <h2 class="section-title">Business Impact</h2>
+        
+        <div class="metrics-grid">
+            <div class="chart-container">
+                <div class="chart-title">Monthly Approval Trends</div>
+                <div class="chart-wrapper">
+                    <canvas id="approvalChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">Portfolio Quality Metrics</div>
+                <div class="chart-wrapper">
+                    <canvas id="qualityChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Demographic Impact Analysis</div>
+            <div class="chart-wrapper">
+                <canvas id="demographicChart"></canvas>
+            </div>
+            <div class="insight-box">
+                <h4>Inclusion Success:</h4>
+                <p>The model particularly excelled at identifying creditworthy women-led businesses, increasing their approval rate by 45%. This demonstrates AI's potential to reduce bias in traditional lending.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Stack -->
+    <section class="section animate-on-scroll">
+        <h2 class="section-title">Technology Stack</h2>
+        
+        <div class="tech-stack">
+            <div class="tech-badge">
+                <h4>Python</h4>
+                <p>Core ML Development</p>
+            </div>
+            <div class="tech-badge">
+                <h4>XGBoost</h4>
+                <p>Gradient Boosting</p>
+            </div>
+            <div class="tech-badge">
+                <h4>Power BI</h4>
+                <p>Dashboard & Analytics</p>
+            </div>
+            <div class="tech-badge">
+                <h4>SQL</h4>
+                <p>Data Pipeline</p>
+            </div>
+            <div class="tech-badge">
+                <h4>SHAP</h4>
+                <p>Model Explainability</p>
+            </div>
+            <div class="tech-badge">
+                <h4>Azure</h4>
+                <p>Cloud Infrastructure</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Roadmap -->
+    <section class="section animate-on-scroll">
+        <div class="cta-section">
+            <h2>Future Opportunities</h2>
+            <p style="font-size: 1.2rem; margin: 2rem 0; color: #cbd5e1;">This project opens doors to cross-border trade finance, blockchain integration, and partnerships with development banks for broader financial inclusion initiatives.</p>
+            
+            <button class="cta-button" onclick="scrollToTop()">Explore More</button>
+            <button class="cta-button" onclick="window.open('mailto:contact@example.com', '_blank')">Get In Touch</button>
+        </div>
+    </section>
+
+    <script>
+        // Chart.js default settings
+        Chart.defaults.color = '#cbd5e1';
+        Chart.defaults.backgroundColor = 'rgba(96, 165, 250, 0.1)';
+        Chart.defaults.borderColor = 'rgba(96, 165, 250, 0.3)';
+
+        // Data Sources Chart
+        const dataSourceCtx = document.getElementById('dataSourceChart').getContext('2d');
+        new Chart(dataSourceCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Mobile Money', 'Telco Usage', 'Utility Payments', 'Business Metrics', 'Social Signals'],
+                datasets: [{
+                    data: [35, 25, 20, 15, 5],
+                    backgroundColor: [
+                        'rgba(34, 197, 94, 0.8)',
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(147, 51, 234, 0.8)',
+                        'rgba(236, 72, 153, 0.8)',
+                        'rgba(249, 115, 22, 0.8)'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#1e293b'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 20, usePointStyle: true }
+                    }
+                }
+            }
+        });
+
+        // Performance Metrics Chart
+        const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(performanceCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'AUC-ROC', 'Fairness'],
+                datasets: [{
+                    label: 'AI Model',
+                    data: [87, 84, 89, 86, 91, 82],
+                    backgroundColor: 'rgba(96, 165, 250, 0.2)',
+                    borderColor: 'rgba(96, 165, 250, 1)',
+                    pointBackgroundColor: 'rgba(96, 165, 250, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(96, 165, 250, 1)'
+                }, {
+                    label: 'Traditional Model',
+                    data: [72, 68, 74, 71, 76, 65],
+                    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                    borderColor: 'rgba(239, 68, 68, 1)',
+                    pointBackgroundColor: 'rgba(239, 68, 68, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(239, 68, 68, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        angleLines: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Risk Distribution Chart
+        const riskCtx = document.getElementById('riskChart').getContext('2d');
+        new Chart(riskCtx, {
+            type: 'bar',
+            data: {
+                labels: ['800-900', '700-799', '600-699', '500-599', '400-499', '300-399'],
+                datasets: [{
+                    label: 'Default Rate (%)',
+                    data: [2.1, 4.8, 8.3, 15.2, 28.7, 42.1],
+                    backgroundColor: [
+                        'rgba(34, 197, 94, 0.8)',
+                        'rgba(101, 163, 13, 0.8)',
+                        'rgba(234, 179, 8, 0.8)',
+                        'rgba(249, 115, 22, 0.8)',
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(185, 28, 28, 0.8)'
+                    ],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Default Rate (%)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        title: { display: true, text: 'Credit Score Range' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+
+        // Processing Time Chart
+        const timeCtx = document.getElementById('timeChart').getContext('2d');
+        new Chart(timeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Traditional Process', 'AI-Powered Process'],
+                datasets: [{
+                    label: 'Processing Time (Hours)',
+                    data: [72, 0.17],
+                    backgroundColor: ['rgba(239, 68, 68, 0.8)', 'rgba(34, 197, 94, 0.8)'],
+                    borderRadius: 12
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Time (Hours)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+
+        // Approval Trends Chart
+        const approvalCtx = document.getElementById('approvalChart').getContext('2d');
+        new Chart(approvalCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Approval Rate (%)',
+                    data: [45, 52, 58, 64, 69, 73, 76, 78, 81, 83, 85, 87],
+                    borderColor: 'rgba(96, 165, 250, 1)',
+                    backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: { display: true, text: 'Approval Rate (%)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+
+        // Portfolio Quality Chart
+        const qualityCtx = document.getElementById('qualityChart').getContext('2d');
+        new Chart(qualityCtx, {
+            type: 'line',
+            data: {
+                labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                datasets: [{
+                    label: '30-Day Delinquency (%)',
+                    data: [8.2, 6.8, 5.9, 4.7],
+                    borderColor: 'rgba(239, 68, 68, 1)',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: '90-Day Delinquency (%)',
+                    data: [4.1, 3.2, 2.8, 2.1],
+                    borderColor: 'rgba(34, 197, 94, 1)',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Delinquency Rate (%)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Demographic Impact Chart
+        const demographicCtx = document.getElementById('demographicChart').getContext('2d');
+        new Chart(demographicCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Women-led', 'Youth-led', 'Rural', 'Urban', 'Micro', 'Small', 'Medium'],
+                datasets: [{
+                    label: 'Traditional Approval (%)',
+                    data: [32, 28, 25, 48, 35, 52, 68],
+                    backgroundColor: 'rgba(239, 68, 68, 0.7)',
+                    borderRadius: 6
+                }, {
+                    label: 'AI-Enhanced Approval (%)',
+                    data: [77, 71, 68, 82, 73, 86, 91],
+                    backgroundColor: 'rgba(34, 197, 94, 0.7)',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: { display: true, text: 'Approval Rate (%)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        title: { display: true, text: 'Business Category' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll to top
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Add hover effects to stat cards
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-10px) scale(1.05)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Enhanced tech badge interactions
+        document.querySelectorAll('.tech-badge').forEach(badge => {
+            badge.addEventListener('click', () => {
+                // Create a ripple effect
+                const ripple = document.createElement('div');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'rgba(96, 165, 250, 0.6)';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.left = '50%';
+                ripple.style.top = '50%';
+                ripple.style.width = ripple.style.height = '10px';
+                ripple.style.marginLeft = ripple.style.marginTop = '-5px';
+                
+                badge.style.position = 'relative';
+                badge.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add CSS for ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+            
+            @keyframes countUp {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            .stat-number {
+                animation: countUp 0.8s ease-out;
+            }
+            
+            .process-card:nth-child(2) {
+                animation-delay: 0.1s;
+            }
+            
+            .process-card:nth-child(3) {
+                animation-delay: 0.2s;
+            }
+            
+            .tech-badge:hover {
+                box-shadow: 0 8px 25px rgba(96, 165, 250, 0.15);
+            }
+            
+            .chart-container:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add loading animation for charts
+        function animateChart(chart) {
+            chart.data.datasets.forEach((dataset, i) => {
+                const meta = chart.getDatasetMeta(i);
+                meta.data.forEach((element, index) => {
+                    element._model.y = chart.chartArea.bottom;
+                });
+            });
+            chart.render();
+            
+            setTimeout(() => {
+                chart.data.datasets.forEach((dataset, i) => {
+                    const meta = chart.getDatasetMeta(i);
+                    meta.data.forEach((element, index) => {
+                        delete element._model.y;
+                    });
+                });
+                chart.update();
+            }, 100);
+        }
+
+        // Add particle background effect
+        function createParticles() {
+            const canvas = document.createElement('canvas');
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.pointerEvents = 'none';
+            canvas.style.zIndex = '-1';
+            canvas.style.opacity = '0.1';
+            document.body.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2 + 1
+                });
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                    
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fillStyle = '#60a5fa';
+                    ctx.fill();
+                });
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+            
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+        
+        // Initialize particles after page load
+        setTimeout(createParticles, 1000);
+
+        // Add scroll progress indicator
+        const progressBar = document.createElement('div');
+        progressBar.style.position = 'fixed';
+        progressBar.style.top = '0';
+        progressBar.style.left = '0';
+        progressBar.style.width = '0%';
+        progressBar.style.height = '3px';
+        progressBar.style.background = 'linear-gradient(90deg, #60a5fa, #c084fc)';
+        progressBar.style.zIndex = '1000';
+        progressBar.style.transition = 'width 0.1s ease';
+        document.body.appendChild(progressBar);
+        
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + '%';
+        });
+
+        // Enhanced CTA button interactions
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.style.transform = 'translateY(-3px) scale(1.02)';
+                button.style.boxShadow = '0 15px 35px rgba(139, 92, 246, 0.4)';
+            });
+            
+            button.addEventListener('mouseleave', () => {
+                button.style.transform = 'translateY(0) scale(1)';
+                button.style.boxShadow = '0 10px 25px rgba(139, 92, 246, 0.3)';
+            });
+            
+            button.addEventListener('click', (e) => {
+                // Create click animation
+                const rect = button.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                button.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add typewriter effect to hero title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            type();
+        }
+
+        // Initialize typewriter effect after a delay
+        setTimeout(() => {
+            const heroTitle = document.querySelector('.hero h1');
+            const originalText = heroTitle.textContent;
+            typeWriter(heroTitle, originalText, 80);
+        }, 500);
+
+        // Add floating animation to workflow steps
+        document.querySelectorAll('.workflow-step').forEach((step, index) => {
+            step.style.animationDelay = `${index * 0.2}s`;
+            step.style.animation = 'float 6s ease-in-out infinite';
+        });
+
+        // Enhanced chart tooltips with custom styling
+        Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 15, 35, 0.95)';
+        Chart.defaults.plugins.tooltip.titleColor = '#f1f5f9';
+        Chart.defaults.plugins.tooltip.bodyColor = '#cbd5e1';
+        Chart.defaults.plugins.tooltip.borderColor = 'rgba(96, 165, 250, 0.3)';
+        Chart.defaults.plugins.tooltip.borderWidth = 1;
+        Chart.defaults.plugins.tooltip.cornerRadius = 12;
+        Chart.defaults.plugins.tooltip.displayColors = true;
+        Chart.defaults.plugins.tooltip.usePointStyle = true;
+
+        console.log('🚀 AI Credit Scoring Dashboard Loaded Successfully!');
+    </script>
+</body>
+</html>

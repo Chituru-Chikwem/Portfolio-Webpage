@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross-Market Product Opportunity Mapping | Fintech Expansion Strategy</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e6ed;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+            background: radial-gradient(circle at center, rgba(0, 123, 255, 0.1) 0%, transparent 70%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="0.5" fill="%23ffffff" opacity="0.05"/><circle cx="75" cy="75" r="0.3" fill="%23007bff" opacity="0.1"/><circle cx="50" cy="10" r="0.4" fill="%23ffffff" opacity="0.03"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #007bff, #00d4ff, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #b8c5d1;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 123, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .metric-card:hover::before {
+            left: 100%;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 123, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 123, 255, 0.1);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 1.1rem;
+            color: #b8c5d1;
+            font-weight: 500;
+        }
+
+        .section {
+            margin: 80px 0;
+            padding: 60px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 50px;
+            background: linear-gradient(135deg, #ffffff, #b8c5d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .heatmap-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .heatmap-cell {
+            aspect-ratio: 1;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .heatmap-cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: inherit;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .heatmap-cell:hover::before {
+            opacity: 1;
+        }
+
+        .heatmap-cell:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .country-name {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .score {
+            font-size: 1.2rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        .roadmap {
+            display: grid;
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .roadmap-phase {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .roadmap-phase:hover {
+            transform: translateX(10px);
+            border-color: rgba(0, 123, 255, 0.3);
+        }
+
+        .phase-number {
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .phase-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 15px;
+            margin-left: 20px;
+        }
+
+        .phase-details {
+            color: #b8c5d1;
+            margin-left: 20px;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .insight-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .insight-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .insight-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .canvas-3d {
+            width: 100%;
+            height: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .heatmap-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="hero">
+            <h1>Cross-Market Product Opportunity Mapping</h1>
+            <p>Strategic Fintech Expansion Framework for African Markets</p>
+            <p style="font-size: 1rem; margin-top: 20px; opacity: 0.8;">Leveraging telco insights, B2B fintech experience, and multi-country procurement expertise</p>
+        </section>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">12</div>
+                <div class="metric-label">African Markets Analyzed</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">85%</div>
+                <div class="metric-label">Market Assessment Accuracy</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">$2.4B</div>
+                <div class="metric-label">Total Addressable Market</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">67%</div>
+                <div class="metric-label">Mobile Penetration Rate</div>
+            </div>
+        </div>
+
+        <section class="section">
+            <h2 class="section-title">Market Readiness Heatmap</h2>
+            <div class="chart-container">
+                <h3 class="chart-title">Fintech Opportunity Score by Country</h3>
+                <div class="heatmap-container" id="heatmap">
+                    <!-- Heatmap cells will be generated by JavaScript -->
+                </div>
+                <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px; gap: 20px;">
+                    <span style="font-size: 0.9rem; color: #b8c5d1;">Low Opportunity</span>
+                    <div style="display: flex; gap: 3px;">
+                        <div style="width: 20px; height: 10px; background: #ff4757; border-radius: 2px;"></div>
+                        <div style="width: 20px; height: 10px; background: #ff7675; border-radius: 2px;"></div>
+                        <div style="width: 20px; height: 10px; background: #fdcb6e; border-radius: 2px;"></div>
+                        <div style="width: 20px; height: 10px; background: #6c5ce7; border-radius: 2px;"></div>
+                        <div style="width: 20px; height: 10px; background: #00b894; border-radius: 2px;"></div>
+                    </div>
+                    <span style="font-size: 0.9rem; color: #b8c5d1;">High Opportunity</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Competitive Analysis</h2>
+            <div class="chart-container">
+                <h3 class="chart-title">Market Share by Fintech Category</h3>
+                <canvas id="competitiveChart" width="400" height="200"></canvas>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Customer Behavioral Patterns</h2>
+            <div class="chart-container">
+                <h3 class="chart-title">Digital Payment Adoption Trends</h3>
+                <canvas id="behaviorChart" width="400" height="200"></canvas>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Multi-Dimensional Market Analysis</h2>
+            
+            <!-- Interactive Dashboard -->
+            <div class="chart-container">
+                <h3 class="chart-title">Interactive Market Opportunity Dashboard</h3>
+                
+                <!-- Control Panel -->
+                <div style="display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label style="color: #b8c5d1; font-size: 0.9rem;">View Mode:</label>
+                        <select id="viewMode" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #e0e6ed; padding: 8px 12px; border-radius: 8px;">
+                            <option value="bubble">Bubble Chart</option>
+                            <option value="scatter">Scatter Plot</option>
+                            <option value="ranking">Market Rankings</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label style="color: #b8c5d1; font-size: 0.9rem;">Focus Dimension:</label>
+                        <select id="focusDimension" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #e0e6ed; padding: 8px 12px; border-radius: 8px;">
+                            <option value="all">All Factors</option>
+                            <option value="market">Market Size</option>
+                            <option value="digital">Digital Readiness</option>
+                            <option value="regulatory">Regulatory Environment</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Main Visualization Container -->
+                <div id="dashboardContainer" style="min-height: 500px;">
+                    <!-- Bubble Chart View -->
+                    <div id="bubbleView" class="dashboard-view">
+                        <canvas id="bubbleChart" width="400" height="300"></canvas>
+                        <div style="text-align: center; margin-top: 15px; color: #b8c5d1; font-size: 0.9rem;">
+                            <strong>Bubble Size:</strong> Market Size | <strong>X-Axis:</strong> Digital Readiness | <strong>Y-Axis:</strong> Regulatory Environment
+                        </div>
+                    </div>
+
+                    <!-- Market Rankings View -->
+                    <div id="rankingView" class="dashboard-view" style="display: none;">
+                        <div id="marketRankings"></div>
+                    </div>
+                </div>
+
+                <!-- Key Insights Panel -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px;">
+                    <div style="background: rgba(0, 123, 255, 0.1); padding: 20px; border-radius: 10px; border-left: 4px solid #007bff;">
+                        <h4 style="color: #00d4ff; margin-bottom: 10px;">🏆 Top Opportunity</h4>
+                        <p style="color: #ffffff; font-weight: 600;">Nigeria</p>
+                        <p style="color: #b8c5d1; font-size: 0.9rem;">Largest market size with strong digital adoption and favorable regulatory sandbox</p>
+                    </div>
+                    <div style="background: rgba(0, 212, 255, 0.1); padding: 20px; border-radius: 10px; border-left: 4px solid #00d4ff;">
+                        <h4 style="color: #00d4ff; margin-bottom: 10px;">⚡ Best Digital Readiness</h4>
+                        <p style="color: #ffffff; font-weight: 600;">Kenya</p>
+                        <p style="color: #b8c5d1; font-size: 0.9rem;">M-Pesa pioneer with 85% mobile money penetration and tech-savvy population</p>
+                    </div>
+                    <div style="background: rgba(108, 92, 231, 0.1); padding: 20px; border-radius: 10px; border-left: 4px solid #6c5ce7;">
+                        <h4 style="color: #6c5ce7; margin-bottom: 10px;">🔄 Hidden Gem</h4>
+                        <p style="color: #ffffff; font-weight: 600;">Rwanda</p>
+                        <p style="color: #b8c5d1; font-size: 0.9rem;">Small market but excellent regulatory environment and rapid digitalization</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Strategic Go-to-Market Roadmap</h2>
+            <div class="roadmap">
+                <div class="roadmap-phase">
+                    <div class="phase-number">1</div>
+                    <h3 class="phase-title">Tier 1 Markets - Immediate Entry (Q1-Q2)</h3>
+                    <div class="phase-details">
+                        <p><strong>Target Markets:</strong> Nigeria, Kenya, South Africa</p>
+                        <p><strong>Strategy:</strong> Partner with existing mobile operators, focus on mobile money integration</p>
+                        <p><strong>Investment:</strong> $1.2M initial market entry</p>
+                        <p><strong>Expected ROI:</strong> 150% within 18 months</p>
+                    </div>
+                </div>
+                
+                <div class="roadmap-phase">
+                    <div class="phase-number">2</div>
+                    <h3 class="phase-title">Tier 2 Markets - Strategic Expansion (Q3-Q4)</h3>
+                    <div class="phase-details">
+                        <p><strong>Target Markets:</strong> Ghana, Uganda, Tanzania</p>
+                        <p><strong>Strategy:</strong> Localized product features, regulatory compliance focus</p>
+                        <p><strong>Investment:</strong> $800K market development</p>
+                        <p><strong>Expected ROI:</strong> 120% within 24 months</p>
+                    </div>
+                </div>
+                
+                <div class="roadmap-phase">
+                    <div class="phase-number">3</div>
+                    <h3 class="phase-title">Tier 3 Markets - Long-term Growth (Year 2)</h3>
+                    <div class="phase-details">
+                        <p><strong>Target Markets:</strong> Rwanda, Senegal, Zambia</p>
+                        <p><strong>Strategy:</strong> Infrastructure development, educational initiatives</p>
+                        <p><strong>Investment:</strong> $600K infrastructure & education</p>
+                        <p><strong>Expected ROI:</strong> 90% within 36 months</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Key Strategic Insights</h2>
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-icon">📱</div>
+                    <h3 class="insight-title">Mobile-First Approach</h3>
+                    <p class="phase-details">89% of financial transactions in target markets occur via mobile devices. USSD-based solutions critical for feature phone users representing 45% of the market.</p>
+                </div>
+                
+                <div class="insight-card">
+                    <div class="insight-icon">🏦</div>
+                    <h3 class="insight-title">Banking Infrastructure Gaps</h3>
+                    <p class="phase-details">Average of 12 bank branches per 100,000 adults across target markets creates significant opportunity for digital-first financial services.</p>
+                </div>
+                
+                <div class="insight-card">
+                    <div class="insight-icon">🤝</div>
+                    <h3 class="insight-title">Partnership Opportunities</h3>
+                    <p class="phase-details">Telecom operators control 78% of mobile money transactions. Strategic partnerships with MTN, Airtel, and Safaricom essential for market penetration.</p>
+                </div>
+                
+                <div class="insight-card">
+                    <div class="insight-icon">⚖️</div>
+                    <h3 class="insight-title">Regulatory Landscape</h3>
+                    <p class="phase-details">Sandbox programs active in 8 out of 12 target markets. Nigeria and Kenya offer most favorable regulatory environments for fintech innovation.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Heatmap Data and Generation
+        const heatmapData = [
+            { country: 'Nigeria', score: 9.2, color: '#00b894' },
+            { country: 'Kenya', score: 8.8, color: '#00b894' },
+            { country: 'S. Africa', score: 8.5, color: '#00b894' },
+            { country: 'Ghana', score: 7.3, color: '#6c5ce7' },
+            { country: 'Uganda', score: 7.1, color: '#6c5ce7' },
+            { country: 'Tanzania', score: 6.8, color: '#6c5ce7' },
+            { country: 'Rwanda', score: 6.2, color: '#fdcb6e' },
+            { country: 'Senegal', score: 5.9, color: '#fdcb6e' },
+            { country: 'Zambia', score: 5.4, color: '#ff7675' },
+            { country: 'Mali', score: 4.8, color: '#ff7675' },
+            { country: 'Chad', score: 3.2, color: '#ff4757' },
+            { country: 'C.A.R.', score: 2.8, color: '#ff4757' }
+        ];
+
+        function generateHeatmap() {
+            const heatmapContainer = document.getElementById('heatmap');
+            heatmapData.forEach((item, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'heatmap-cell';
+                cell.style.background = `linear-gradient(135deg, ${item.color}, ${item.color}dd)`;
+                cell.innerHTML = `
+                    <div class="country-name">${item.country}</div>
+                    <div class="score">${item.score}</div>
+                `;
+                cell.style.animationDelay = `${index * 0.1}s`;
+                heatmapContainer.appendChild(cell);
+            });
+        }
+
+        // Competitive Analysis Chart
+        function createCompetitiveChart() {
+            const ctx = document.getElementById('competitiveChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Mobile Money', 'Digital Banking', 'P2P Payments', 'Micro-loans', 'Investment', 'Others'],
+                    datasets: [{
+                        data: [35, 22, 18, 12, 8, 5],
+                        backgroundColor: [
+                            '#007bff',
+                            '#00d4ff',
+                            '#6c5ce7',
+                            '#fdcb6e',
+                            '#00b894',
+                            '#ff7675'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#e0e6ed',
+                                padding: 20,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Behavioral Patterns Chart
+        function createBehaviorChart() {
+            const ctx = document.getElementById('behaviorChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
+                    datasets: [
+                        {
+                            label: 'Mobile Payments',
+                            data: [23, 31, 45, 58, 67, 74],
+                            borderColor: '#007bff',
+                            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Digital Wallets',
+                            data: [12, 18, 28, 39, 48, 56],
+                            borderColor: '#00d4ff',
+                            backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Online Banking',
+                            data: [8, 12, 19, 26, 34, 41],
+                            borderColor: '#6c5ce7',
+                            backgroundColor: 'rgba(108, 92, 231, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e0e6ed'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#b8c5d1'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#b8c5d1',
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Market Data
+        const marketData = [
+            { name: 'Nigeria', market: 9.2, digital: 7.3, regulatory: 6.8, overall: 9.2, tier: 1, color: '#00b894' },
+            { name: 'Kenya', market: 7.1, digital: 9.1, regulatory: 8.5, overall: 8.8, tier: 1, color: '#00b894' },
+            { name: 'S. Africa', market: 8.8, digital: 6.9, regulatory: 7.2, overall: 8.5, tier: 1, color: '#00b894' },
+            { name: 'Ghana', market: 6.2, digital: 6.8, regulatory: 5.9, overall: 7.3, tier: 2, color: '#6c5ce7' },
+            { name: 'Uganda', market: 5.4, digital: 7.2, regulatory: 4.8, overall: 7.1, tier: 2, color: '#6c5ce7' },
+            { name: 'Tanzania', market: 6.8, digital: 5.9, regulatory: 6.2, overall: 6.8, tier: 2, color: '#6c5ce7' },
+            { name: 'Rwanda', market: 3.2, digital: 8.1, regulatory: 7.8, overall: 6.2, tier: 3, color: '#fdcb6e' },
+            { name: 'Senegal', market: 4.8, digital: 5.2, regulatory: 5.1, overall: 5.9, tier: 3, color: '#fdcb6e' },
+            { name: 'Zambia', market: 4.1, digital: 4.9, regulatory: 4.2, overall: 5.4, tier: 3, color: '#ff7675' },
+            { name: 'Mali', market: 3.9, digital: 4.2, regulatory: 3.8, overall: 4.8, tier: 3, color: '#ff7675' }
+        ];
+
+        let bubbleChartInstance = null;
+
+        // Interactive Dashboard
+        function createInteractiveDashboard() {
+            createBubbleChart();
+            createMarketRankings();
+            
+            // Event listeners for controls
+            document.getElementById('viewMode').addEventListener('change', function() {
+                const mode = this.value;
+                document.querySelectorAll('.dashboard-view').forEach(view => {
+                    view.style.display = 'none';
+                });
+                
+                if (mode === 'bubble' || mode === 'scatter') {
+                    document.getElementById('bubbleView').style.display = 'block';
+                    if (mode === 'scatter') {
+                        createScatterPlot();
+                    } else {
+                        createBubbleChart();
+                    }
+                } else if (mode === 'ranking') {
+                    document.getElementById('rankingView').style.display = 'block';
+                }
+            });
+        }
+
+        function createBubbleChart() {
+            const ctx = document.getElementById('bubbleChart').getContext('2d');
+            
+            if (bubbleChartInstance) {
+                bubbleChartInstance.destroy();
+            }
+            
+            const bubbleData = marketData.map(country => ({
+                x: country.digital,
+                y: country.regulatory,
+                r: country.market * 3,
+                label: country.name,
+                backgroundColor: country.color,
+                borderColor: country.color
+            }));
+
+            bubbleChartInstance = new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Market Opportunities',
+                        data: bubbleData,
+                        backgroundColor: bubbleData.map(d => d.backgroundColor + '80'),
+                        borderColor: bubbleData.map(d => d.borderColor),
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const country = marketData[context.dataIndex];
+                                    return [
+                                        `${country.name}`,
+                                        `Digital Readiness: ${country.digital}/10`,
+                                        `Regulatory Score: ${country.regulatory}/10`,
+                                        `Market Size: ${country.market}/10`,
+                                        `Overall Score: ${country.overall}/10`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Digital Readiness Score',
+                                color: '#e0e6ed'
+                            },
+                            ticks: {
+                                color: '#b8c5d1'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Regulatory Environment Score',
+                                color: '#e0e6ed'
+                            },
+                            ticks: {
+                                color: '#b8c5d1'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createScatterPlot() {
+            const ctx = document.getElementById('bubbleChart').getContext('2d');
+            
+            if (bubbleChartInstance) {
+                bubbleChartInstance.destroy();
+            }
+            
+            const scatterData = marketData.map(country => ({
+                x: country.market,
+                y: country.overall,
+                label: country.name,
+                backgroundColor: country.color,
+                borderColor: country.color
+            }));
+
+            bubbleChartInstance = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Market vs Overall Score',
+                        data: scatterData,
+                        backgroundColor: scatterData.map(d => d.backgroundColor),
+                        borderColor: scatterData.map(d => d.borderColor),
+                        borderWidth: 2,
+                        pointRadius: 8,
+                        pointHoverRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const country = marketData[context.dataIndex];
+                                    return [
+                                        `${country.name}`,
+                                        `Market Size: ${country.market}/10`,
+                                        `Overall Score: ${country.overall}/10`
+                                    ];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Market Size Score',
+                                color: '#e0e6ed'
+                            },
+                            ticks: {
+                                color: '#b8c5d1'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Overall Opportunity Score',
+                                color: '#e0e6ed'
+                            },
+                            ticks: {
+                                color: '#b8c5d1'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createMarketRankings() {
+            const container = document.getElementById('marketRankings');
+            const sortedMarkets = [...marketData].sort((a, b) => b.overall - a.overall);
+            
+            container.innerHTML = sortedMarkets.map((country, index) => `
+                <div style="display: flex; align-items: center; padding: 15px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; border-left: 4px solid ${country.color};">
+                    <div style="font-size: 1.5rem; font-weight: 700; color: ${country.color}; width: 40px;">#${index + 1}</div>
+                    <div style="flex: 1; margin-left: 20px;">
+                        <div style="font-size: 1.2rem; font-weight: 600; color: #ffffff; margin-bottom: 8px;">${country.name}</div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.8rem; color: #b8c5d1;">Market Size</div>
+                                <div style="font-weight: 600; color: #e0e6ed;">${country.market}/10</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.8rem; color: #b8c5d1;">Digital Ready</div>
+                                <div style="font-weight: 600; color: #e0e6ed;">${country.digital}/10</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.8rem; color: #b8c5d1;">Regulatory</div>
+                                <div style="font-weight: 600; color: #e0e6ed;">${country.regulatory}/10</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 0.8rem; color: #b8c5d1;">Overall</div>
+                                <div style="font-weight: 600; color: ${country.color}; font-size: 1.1rem;">${country.overall}/10</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize all visualizations
+        document.addEventListener('DOMContentLoaded', function() {
+            generateHeatmap();
+            createCompetitiveChart();
+            createBehaviorChart();
+            createInteractiveDashboard();
+        });
+    </script>
+</body>
+</html>

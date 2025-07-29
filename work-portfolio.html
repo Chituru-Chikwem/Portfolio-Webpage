@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chituru Chikwem - Strategic Operations Professional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a'
+                        },
+                        orange: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            300: '#fdba74',
+                            400: '#fb923c',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12'
+                        },
+                        amber: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+        
+        .backdrop-blur-sm {
+            backdrop-filter: blur(4px);
+        }
+        
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(-25%);
+                animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            }
+            50% {
+                transform: none;
+                animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            }
+        }
+        
+        .experience-card, .project-card {
+            transition: all 0.3s ease;
+        }
+        
+        .experience-card:hover, .project-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .skill-tag {
+            transition: all 0.2s ease;
+        }
+        
+        .skill-tag:hover {
+            transform: scale(1.05);
+        }
+
+        .project-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .project-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .project-modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-orange-50 smooth-scroll">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-orange-200 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="text-xl font-semibold text-slate-800">Chituru Chikwem</div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#about" class="text-slate-600 hover:text-amber-600 transition-colors">About</a>
+                    <a href="#experience" class="text-slate-600 hover:text-amber-600 transition-colors">Experience</a>
+                    <a href="#projects" class="text-slate-600 hover:text-amber-600 transition-colors">Projects</a>
+                    <a href="#skills" class="text-slate-600 hover:text-amber-600 transition-colors">Skills</a>
+                    <a href="#education" class="text-slate-600 hover:text-amber-600 transition-colors">Education</a>
+                    <a href="#impact" class="text-slate-600 hover:text-amber-600 transition-colors">Impact</a>
+                    <a href="#contact" class="text-slate-600 hover:text-amber-600 transition-colors">Contact</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="https://www.linkedin.com/in/chituru-chikwem/" class="text-slate-600 hover:text-amber-600 transition-colors">
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                    <button onclick="downloadCV()" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium inline-flex items-center transition-colors">
+                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        Download CV
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-amber-50 pt-20">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-8">
+                        <div class="space-y-4">
+                            <h1 class="text-4xl md:text-5xl font-bold text-slate-800 leading-tight">
+                                Strategic operator and innovation-focused generalist
+                            </h1>
+                            <p class="text-xl md:text-2xl text-amber-600 font-medium">
+                                Executive & Founder Support | Project Leadership | Remote-First
+                            </p>
+                            <p class="text-lg text-slate-600 leading-relaxed">
+                                6+ years supporting C-suite leaders, driving high-impact projects, and delivering operational clarity across startups, accelerators, and mission-led ventures
+                            </p>
+                        </div>
+
+                        <div class="flex items-center space-x-6 text-slate-600">
+                            <div class="flex items-center space-x-2">
+                                <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                                <span>London, UK</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span>Remote-First</span>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button onclick="downloadCV()" class="bg-amber-600 hover:bg-amber-700 text-white px-8 py-4 rounded-lg text-lg font-medium inline-flex items-center justify-center transition-colors">
+                                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                Download CV
+                            </button>
+                            <a href="https://www.linkedin.com/in/chituru-chikwem/" class="border border-amber-600 text-amber-600 hover:bg-amber-50 bg-transparent px-8 py-4 rounded-lg text-lg font-medium inline-flex items-center justify-center transition-colors">
+                                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
+                                View LinkedIn Profile
+                            </a>
+                        </div>
+
+                        <div class="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-400">
+                            <p class="text-sm text-amber-800 font-medium">
+                                🚀 Available for new opportunities | Open to discussing strategic operations and executive support roles
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="relative w-full max-w-md mx-auto">
+                            <div class="absolute inset-0 bg-gradient-to-br from-amber-200 to-orange-200 rounded-2xl transform rotate-6"></div>
+                            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IMG_0166.PNG-VWGS7fIvGQWN6Q1SYIgiVy3vC0j0sM.png" alt="Chituru Chikwem - Strategic Operations Professional" class="relative rounded-2xl shadow-xl object-cover w-full h-96">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About/Profile Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-6">
+                        Profile Summary
+                    </h2>
+                    <p class="text-xl text-slate-600 leading-relaxed">
+                        MSc in International Business with professional certifications in AgilePM and Prince2. Proven ability to build internal systems, coordinate stakeholders, and translate vision into structured execution.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-12">
+                    <div class="border-0 shadow-lg rounded-lg bg-white p-6 text-center">
+                        <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="h-6 w-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-slate-800 mb-2">Executive & Founder Support</h3>
+                        <p class="text-slate-600 text-sm">
+                            Strategic EA / Chief of Staff style support for C-suite leaders and founders
+                        </p>
+                    </div>
+
+                    <div class="border-0 shadow-lg rounded-lg bg-white p-6 text-center">
+                        <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="h-6 w-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-slate-800 mb-2">Project Management</h3>
+                        <p class="text-slate-600 text-sm">
+                            Agile, Prince2, cross-functional teams across startups and accelerators
+                        </p>
+                    </div>
+
+                    <div class="border-0 shadow-lg rounded-lg bg-white p-6 text-center">
+                        <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="h-6 w-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-slate-800 mb-2">Business Operations & Scaling</h3>
+                        <p class="text-slate-600 text-sm">
+                            CRM, workflows, SOPs, and internal systems for operational clarity
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-orange-50 p-8 rounded-2xl">
+                    <h3 class="text-xl font-semibold text-slate-800 mb-4">Core Competencies</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <ul class="space-y-2">
+                                <li class="flex items-center space-x-2">
+                                    <svg class="h-4 w-4 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="text-slate-700">Executive & Founder Support (Strategic EA / CoS style)</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <svg class="h-4 w-4 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="text-slate-700">Project Management (Agile, Prince2, cross-functional teams)</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <svg class="h-4 w-4 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="text-slate-700">Business Operations & Scaling (CRM, workflows, SOPs)</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <ul class="space-y-2">
+                                <li class="flex items-center space-x-2">
+                                    <svg class="h-4 w-4 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="text-slate-700">Partnerships & Ecosystem Development</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <svg class="h-4 w-4 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="text-slate-700">Internal Communications & People Ops</span>
+                                </li>
+                                <li class="flex items-center space-x-2">
+                                    <svg class="h-4 w-4 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="text-slate-700">Workshop Design & Facilitation</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-20 bg-orange-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Professional Experience</h2>
+                    <p class="text-xl text-slate-600">
+                        6+ years driving operational excellence across startups, accelerators, and mission-led ventures
+                    </p>
+                </div>
+
+                <div class="space-y-8">
+                    <!-- Experience 1 -->
+                    <div class="experience-card border-0 shadow-lg hover:shadow-xl bg-white rounded-lg p-8">
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="md:col-span-1">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"/>
+                                    </svg>
+                                    <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded-full text-xs font-medium">Self-employed</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-800 mb-1">Innovation Consultant & Fractional Ops Partner</h3>
+                                <p class="text-amber-600 font-medium mb-2">Remote</p>
+                                <p class="text-slate-500 text-sm mb-4">Nov 2022 – Present</p>
+                                <p class="text-slate-600 text-sm italic">Early-stage ventures and startups</p>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
+                                    <p class="text-green-800 font-medium text-sm">
+                                        <strong>Result:</strong> Clients reported increased operational clarity and stronger cross-team collaboration
+                                    </p>
+                                </div>
+
+                                <div class="mb-6">
+                                    <h4 class="font-semibold text-slate-800 mb-3">Key Achievements:</h4>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-start space-x-2">
+                                            <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span class="text-slate-600 text-sm">Strategized internal systems for 6+ early-stage ventures, leading to up to 40% time saved on manual coordination via custom Notion dashboards and Asana workflows</span>
+                                        </li>
+                                        <li class="flex items-start space-x-2">
+                                            <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span class="text-slate-600 text-sm">Supported founders in fundraising, partnership outreach, and OKR tracking, including preparing investor materials and reporting decks</span>
+                                        </li>
+                                        <li class="flex items-start space-x-2">
+                                            <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span class="text-slate-600 text-sm">Designed and facilitated innovation workshops for a UK-based health tech accelerator, improving team alignment and producing actionable roadmaps</span>
+                                        </li>
+                                        <li class="flex items-start space-x-2">
+                                            <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span class="text-slate-600 text-sm">Developed playbooks for hiring, onboarding, and async communication, enabling clients to scale remote teams efficiently</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-slate-800 mb-2">Skills & Tools:</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Notion</span>
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Asana</span>
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">OKR Tracking</span>
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Workshop Facilitation</span>
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Systems Design</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Experience 2 -->
+                    <div class="experience-card border-0 shadow-lg hover:shadow-xl bg-white rounded-lg p-8">
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="md:col-span-1">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"/>
+                                    </svg>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Full-time</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-800 mb-1">Program & Strategy Lead</h3>
+                                <p class="text-amber-600 font-medium mb-2">Impact Hub - Business of Purpose Fellowship</p>
+                                <p class="text-slate-500 text-sm mb-4">Jan 2022 – Oct 2022</p>
+                                <p class="text-slate-600 text-sm italic">UK / Remote</p>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
+                                    <p class="text-green-800 font-medium text-sm">
+                                        <strong>Result:</strong> Grew fellowship reach by 35% YOY and supported alumni in securing partnerships with regional incubators
+                                    </p>
+                                </div>
+
+                                <div class="mb-6">
+                                    <h4 class="font-semibold text-slate-800 mb-3">Key Achievements:</h4>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-start space-x-2">
+                                            <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span class="text-slate-600 text-sm">Led the end-to-end delivery of a global fellowship program supporting early-stage social entrepreneurs from 20+ countries</span>
+                                        </li>
+                                        <li class="flex items-start space-x-2">
+                                            <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span class="text-slate-600 text-sm">Developed scalable project plans using Agile methodology, resulting in on-time delivery of a 3-month accelerator with a 92% satisfaction rate</span>
+                                        </li>
+                                        <li class="flex items-start space-x-2">
+                                            <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span class="text-slate-600 text-sm">Managed external partners, facilitators, and mentors, coordinating across time zones and ensuring stakeholder alignment</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-slate-800 mb-2">Skills & Tools:</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Agile Methodology</span>
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Program Management</span>
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Stakeholder Coordination</span>
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Global Teams</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Experience 3 -->
+                    <div class="experience-card border-0 shadow-lg hover:shadow-xl bg-white rounded-lg p-8">
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="md:col-span-1">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"/>
+                                    </svg>
+                                    <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">Contract</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-800 mb-1">Strategic Partnerships Associate</h3>
+                                <p class="text-amber-600 font-medium mb-2">Stears (Data Intelligence Startup)</p>
+                                <p class="text-slate-500 text-sm mb-4">May 2021 – Dec 2021</p>
+                                <p class="text-slate-600 text-sm italic">Nigeria / UK</p>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
+                                    <p class="text-green-800 font-medium text-sm">
+                                        <strong>Result:</strong> Created new BD workflows still in use post-contract, helping the commercial team scale partner outreach
+                                    </p>
+                                </div>
+
+                                <div class="mb-6">
+                                    <h4 class="font-semibold text-slate-800 mb-3">Key Achievements:</h4>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-start space-x-2">
+                                            <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span class="text-slate-600 text-sm">Built strategic outreach plans targeting ESG-focused investors and data users, leading to an increase in pilot conversations by 60% in 3 months</span>
+                                        </li>
+                                        <li class="flex items-start space-x-2">
+                                            <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span class="text-slate-600 text-sm">Collaborated with CEO and COO to rework internal dashboards (Airtable + Notion) for team performance tracking</span>
+                                        </li>
+                                        <li class="flex items-start space-x-2">
+                                            <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span class="text-slate-600 text-sm">Created a CRM-driven funnel process that clarified stakeholder segmentation and next steps</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-slate-800 mb-2">Skills & Tools:</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Business Development</span>
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Airtable</span>
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Notion</span>
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">CRM Strategy</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Experience 4 -->
+                    <div class="experience-card border-0 shadow-lg hover:shadow-xl bg-white rounded-lg p-8">
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <div class="md:col-span-1">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"/>
+                                    </svg>
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Full-time</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-800 mb-1">Business Development & Innovation Lead</h3>
+                                <p class="text-amber-600 font-medium mb-2">Pan African Creative Exchange</p>
+                                <p class="text-slate-500 text-sm mb-4">2019 – 2021</p>
+                                <p class="text-slate-600 text-sm italic">South Africa / Remote</p>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
+                                    <p class="text-green-800 font-medium text-sm">
+                                        <strong>Result:</strong> Supported org in securing £50k in additional funding and formalised partnerships with 3 international innovation networks
+                                    </p>
+                                </div>
+
+                                <div class="mb-6">
+                                    <h4 class="font-semibold text-slate-800 mb-3">Key Achievements:</h4>
+                                    <ul class="space-y-2">
+                                        <li class="flex items-start space-x-2">
+                                            <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span class="text-slate-600 text-sm">Co-developed and implemented a strategy to engage creative entrepreneurs and funders across 12 African countries</span>
+                                        </li>
+                                        <li class="flex items-start space-x-2">
+                                            <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span class="text-slate-600 text-sm">Designed a process to map innovation trends across the creative economy, using surveys and interviews with 100+ founders</span>
+                                        </li>
+                                        <li class="flex items-start space-x-2">
+                                            <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            <span class="text-slate-600 text-sm">Managed a multi-stakeholder project funded by British Council and Pro Helvetia, delivering on tight timelines and impact metrics</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-semibold text-slate-800 mb-2">Skills & Tools:</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Grant Writing</span>
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">International Coordination</span>
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Innovation Mapping</span>
+                                        <span class="skill-tag bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm">Multi-stakeholder Projects</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Key Projects & Case Studies</h2>
+                    <p class="text-xl text-slate-600">
+                        Strategic operations projects that delivered measurable impact for clients and organizations
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Project 1 -->
+                    <div class="project-card border-0 shadow-lg hover:shadow-xl bg-white rounded-lg overflow-hidden cursor-pointer" onclick="openProjectModal('project1')">
+                        <div class="h-48 bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center">
+                            <svg class="h-16 w-16 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-slate-800 mb-2">Notion Operations System</h3>
+                            <p class="text-slate-600 text-sm mb-4">Custom operational dashboard for health tech startup reducing manual coordination by 40%</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs">Notion</span>
+                                <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs">Process Design</span>
+                                <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs">Automation</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-amber-600 font-medium text-sm">View Case Study</span>
+                                <svg class="h-4 w-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 -->
+                    <div class="project-card border-0 shadow-lg hover:shadow-xl bg-white rounded-lg overflow-hidden cursor-pointer" onclick="openProjectModal('project2')">
+                        <div class="h-48 bg-gradient-to-br from-orange-100 to-amber-200 flex items-center justify-center">
+                            <svg class="h-16 w-16 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-slate-800 mb-2">Global Fellowship Program</h3>
+                            <p class="text-slate-600 text-sm mb-4">End-to-end program delivery across 20+ countries with 92% satisfaction rate</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">Program Management</span>
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">Agile</span>
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">Global Coordination</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-orange-600 font-medium text-sm">View Case Study</span>
+                                <svg class="h-4 w-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 -->
+                    <div class="project-card border-0 shadow-lg hover:shadow-xl bg-white rounded-lg overflow-hidden cursor-pointer" onclick="openProjectModal('project3')">
+                        <div class="h-48 bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center">
+                            <svg class="h-16 w-16 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-slate-800 mb-2">BD Workflow Optimization</h3>
+                            <p class="text-slate-600 text-sm mb-4">Strategic outreach system increasing pilot conversations by 60% for data startup</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs">CRM Design</span>
+                                <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs">Airtable</span>
+                                <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs">Business Development</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-amber-600 font-medium text-sm">View Case Study</span>
+                                <svg class="h-4 w-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 4 -->
+                    <div class="project-card border-0 shadow-lg hover:shadow-xl bg-white rounded-lg overflow-hidden cursor-pointer" onclick="openProjectModal('project4')">
+                        <div class="h-48 bg-gradient-to-br from-orange-100 to-amber-200 flex items-center justify-center">
+                            <svg class="h-16 w-16 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-slate-800 mb-2">Innovation Workshop Series</h3>
+                            <p class="text-slate-600 text-sm mb-4">Design thinking workshops for health tech accelerator improving team alignment</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">Workshop Design</span>
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">Facilitation</span>
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">Design Thinking</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-orange-600 font-medium text-sm">View Case Study</span>
+                                <svg class="h-4 w-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 5 -->
+                    <div class="project-card border-0 shadow-lg hover:shadow-xl bg-white rounded-lg overflow-hidden cursor-pointer" onclick="openProjectModal('project5')">
+                        <div class="h-48 bg-gradient-to-br from-amber-100 to-orange-200 flex items-center justify-center">
+                            <svg class="h-16 w-16 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-slate-800 mb-2">Pan-African Network Strategy</h3>
+                            <p class="text-slate-600 text-sm mb-4">Multi-country engagement strategy across 12 African countries securing £50k funding</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs">Strategy Development</span>
+                                <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs">Partnership Building</span>
+                                <span class="bg-amber-100 text-amber-800 px-2 py-1 rounded text-xs">Grant Writing</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-amber-600 font-medium text-sm">View Case Study</span>
+                                <svg class="h-4 w-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 6 -->
+                    <div class="project-card border-0 shadow-lg hover:shadow-xl bg-white rounded-lg overflow-hidden cursor-pointer" onclick="openProjectModal('project6')">
+                        <div class="h-48 bg-gradient-to-br from-orange-100 to-amber-200 flex items-center justify-center">
+                            <svg class="h-16 w-16 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                            </svg>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-slate-800 mb-2">Remote Team Playbooks</h3>
+                            <p class="text-slate-600 text-sm mb-4">Comprehensive hiring, onboarding, and async communication frameworks for scaling teams</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">People Ops</span>
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">Process Documentation</span>
+                                <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">Remote Work</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-orange-600 font-medium text-sm">View Case Study</span>
+                                <svg class="h-4 w-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Modals -->
+    <div id="project1" class="project-modal">
+        <div class="project-modal-content max-w-4xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-slate-800">Notion Operations System</h3>
+                <button onclick="closeProjectModal('project1')" class="text-slate-400 hover:text-slate-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-amber-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Challenge</h4>
+                    <p class="text-slate-600">A UK-based health tech startup was spending excessive time on manual coordination tasks, with team members struggling to track project progress, deadlines, and stakeholder communications across multiple tools.</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Solution</h4>
+                    <p class="text-slate-600">Designed and implemented a comprehensive Notion workspace integrating project management, CRM functionality, and automated reporting. Created custom templates for different project types and established clear workflows for team collaboration.</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Results</h4>
+                    <ul class="text-slate-600 space-y-1">
+                        <li>• 40% reduction in time spent on manual coordination</li>
+                        <li>• Improved team visibility into project status and deadlines</li>
+                        <li>• Streamlined client communication and reporting processes</li>
+                        <li>• Enhanced data-driven decision making through automated dashboards</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-800 mb-2">Tools & Technologies</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">Notion</span>
+                        <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">Zapier</span>
+                        <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">Process Design</span>
+                        <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">Automation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="project2" class="project-modal">
+        <div class="project-modal-content max-w-4xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-slate-800">Global Fellowship Program</h3>
+                <button onclick="closeProjectModal('project2')" class="text-slate-400 hover:text-slate-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-orange-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Challenge</h4>
+                    <p class="text-slate-600">Impact Hub needed to scale their Business of Purpose Fellowship program globally while maintaining quality and participant satisfaction across diverse time zones and cultural contexts.</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Solution</h4>
+                    <p class="text-slate-600">Led end-to-end program delivery using Agile methodology, coordinating with external partners, facilitators, and mentors across 20+ countries. Developed scalable project plans and stakeholder management frameworks.</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Results</h4>
+                    <ul class="text-slate-600 space-y-1">
+                        <li>• 92% participant satisfaction rate</li>
+                        <li>• 35% YoY growth in fellowship reach</li>
+                        <li>• On-time delivery of 3-month accelerator program</li>
+                        <li>• Successful coordination across multiple time zones</li>
+                        <li>• Alumni secured partnerships with regional incubators</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-800 mb-2">Tools & Technologies</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Agile Methodology</span>
+                        <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Asana</span>
+                        <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Slack</span>
+                        <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Global Coordination</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="project3" class="project-modal">
+        <div class="project-modal-content max-w-4xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-slate-800">BD Workflow Optimization</h3>
+                <button onclick="closeProjectModal('project3')" class="text-slate-400 hover:text-slate-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-amber-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Challenge</h4>
+                    <p class="text-slate-600">Stears, a data intelligence startup, needed to scale their business development efforts and improve conversion rates for pilot conversations with ESG-focused investors and data users.</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Solution</h4>
+                    <p class="text-slate-600">Built strategic outreach plans and created a CRM-driven funnel process using Airtable and Notion. Collaborated with CEO and COO to rework internal dashboards for better team performance tracking and stakeholder segmentation.</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Results</h4>
+                    <ul class="text-slate-600 space-y-1">
+                        <li>• 60% increase in pilot conversations within 3 months</li>
+                        <li>• Improved stakeholder segmentation and targeting</li>
+                        <li>• BD workflows still in use post-contract</li>
+                        <li>• Enhanced team performance tracking capabilities</li>
+                        <li>• Clearer next steps and follow-up processes</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-800 mb-2">Tools & Technologies</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">Airtable</span>
+                        <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">Notion</span>
+                        <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">CRM Design</span>
+                        <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">Business Development</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="project4" class="project-modal">
+        <div class="project-modal-content max-w-4xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-slate-800">Innovation Workshop Series</h3>
+                <button onclick="closeProjectModal('project4')" class="text-slate-400 hover:text-slate-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-orange-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Challenge</h4>
+                    <p class="text-slate-600">A UK-based health tech accelerator needed to improve team alignment and strategic thinking among their portfolio companies while fostering innovation and collaboration.</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Solution</h4>
+                    <p class="text-slate-600">Designed and facilitated a series of innovation workshops using design thinking methodologies and systems thinking approaches. Created actionable roadmaps and frameworks for strategic decision-making.</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Results</h4>
+                    <ul class="text-slate-600 space-y-1">
+                        <li>• Improved team alignment across portfolio companies</li>
+                        <li>• Actionable strategic roadmaps produced</li>
+                        <li>• Enhanced innovation capabilities</li>
+                        <li>• Stronger collaboration between teams</li>
+                        <li>• Frameworks adopted for ongoing strategic planning</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-800 mb-2">Tools & Technologies</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Design Thinking</span>
+                        <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Workshop Facilitation</span>
+                        <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Miro</span>
+                        <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Systems Thinking</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="project5" class="project-modal">
+        <div class="project-modal-content max-w-4xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-slate-800">Pan-African Network Strategy</h3>
+                <button onclick="closeProjectModal('project5')" class="text-slate-400 hover:text-slate-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-amber-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Challenge</h4>
+                    <p class="text-slate-600">Pan African Creative Exchange needed to develop a comprehensive strategy to engage creative entrepreneurs and funders across 12 African countries while securing additional funding for expansion.</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Solution</h4>
+                    <p class="text-slate-600">Co-developed and implemented a multi-country engagement strategy, designed innovation trend mapping processes, and managed multi-stakeholder projects funded by British Council and Pro Helvetia.</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Results</h4>
+                    <ul class="text-slate-600 space-y-1">
+                        <li>• £50k in additional funding secured</li>
+                        <li>• Partnerships formalized with 3 international innovation networks</li>
+                        <li>• Innovation trends mapped across creative economy</li>
+                        <li>• 100+ founder interviews and surveys conducted</li>
+                        <li>• Multi-stakeholder projects delivered on time and budget</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-800 mb-2">Tools & Technologies</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">Strategy Development</span>
+                        <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">Grant Writing</span>
+                        <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">Partnership Building</span>
+                        <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">Innovation Mapping</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="project6" class="project-modal">
+        <div class="project-modal-content max-w-4xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-slate-800">Remote Team Playbooks</h3>
+                <button onclick="closeProjectModal('project6')" class="text-slate-400 hover:text-slate-600">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-orange-50 p-4 rounded-lg">
+                    <h4 class="font-semibent text-slate-800 mb-2">Challenge</h4>
+                    <p class="text-slate-600">Multiple early-stage ventures needed structured approaches to hiring, onboarding, and managing remote teams efficiently while maintaining culture and productivity.</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Solution</h4>
+                    <p class="text-slate-600">Developed comprehensive playbooks covering hiring processes, onboarding workflows, and async communication frameworks. Created templates and checklists for consistent implementation across different team sizes and structures.</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h4 class="font-semibold text-slate-800 mb-2">Results</h4>
+                    <ul class="text-slate-600 space-y-1">
+                        <li>• Streamlined hiring processes reducing time-to-hire</li>
+                        <li>• Improved new team member onboarding experience</li>
+                        <li>• Enhanced async communication and collaboration</li>
+                        <li>• Scalable frameworks for team growth</li>
+                        <li>• Maintained team culture in remote environment</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-800 mb-2">Tools & Technologies</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Process Documentation</span>
+                        <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Notion</span>
+                        <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">People Ops</span>
+                        <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">Remote Work</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills & Tech Tools Section -->
+    <section id="skills" class="py-20 bg-orange-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Tech & Tools</h2>
+                    <p class="text-xl text-slate-600">
+                        Technical proficiency across project management, collaboration, and business operations platforms
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl mb-12 shadow-lg">
+                    <div class="grid md:grid-cols-4 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-slate-800 mb-3">Project Management</h4>
+                            <div class="space-y-2">
+                                <span class="skill-tag bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm inline-block">Notion</span>
+                                <span class="skill-tag bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm inline-block">Asana</span>
+                                <span class="skill-tag bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm inline-block">Trello</span>
+                                <span class="skill-tag bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm inline-block">ClickUp</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-slate-800 mb-3">Collaboration</h4>
+                            <div class="space-y-2">
+                                <span class="skill-tag bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm inline-block">Slack</span>
+                                <span class="skill-tag bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm inline-block">Figma</span>
+                                <span class="skill-tag bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm inline-block">Miro</span>
+                                <span class="skill-tag bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm inline-block">Google Workspace</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-slate-800 mb-3">Data & CRM</h4>
+                            <div class="space-y-2">
+                                <span class="skill-tag bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm inline-block">Airtable</span>
+                                <span class="skill-tag bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm inline-block">HubSpot</span>
+                                <span class="skill-tag bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm inline-block">Excel</span>
+                                <span class="skill-tag bg-amber-50 text-amber-700 px-3 py-1 rounded-full text-sm inline-block">Zapier</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-slate-800 mb-3">Methodologies</h4>
+                            <div class="space-y-2">
+                                <span class="skill-tag bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm inline-block">Agile</span>
+                                <span class="skill-tag bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm inline-block">Prince2</span>
+                                <span class="skill-tag bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm inline-block">Design Thinking</span>
+                                <span class="skill-tag bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm inline-block">Systems Thinking</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Education & Training</h2>
+                    <p class="text-xl text-slate-600">Academic foundation and professional certifications</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="border-0 shadow-lg rounded-lg bg-white p-8">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <svg class="h-8 w-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                            </svg>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-800">MSc, International Business</h3>
+                                <p class="text-amber-600 font-medium">with Data Analytics</p>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 mb-2">Ulster University, UK</p>
+                        <p class="text-slate-500 text-sm">Thesis: Building Systems of Accountability for Impact Ventures</p>
+                    </div>
+
+                    <div class="border-0 shadow-lg rounded-lg bg-white p-8">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <svg class="h-8 w-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                            </svg>
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-800">BSc, International Business</h3>
+                                <p class="text-amber-600 font-medium">First Class Honours</p>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 mb-2">University of Sussex</p>
+                        <p class="text-slate-500 text-sm">Global business perspective and analytical foundation</p>
+                    </div>
+                </div>
+
+                <div class="bg-orange-50 p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-xl font-semibold text-slate-800 mb-6 text-center">Certifications</h3>
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <svg class="h-8 w-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                                </svg>
+                            </div>
+                            <h4 class="font-medium text-slate-800">Agile Project Management</h4>
+                            <p class="text-slate-600 text-sm">AgilePM Foundation & Practitioner</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <svg class="h-8 w-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                                </svg>
+                            </div>
+                            <h4 class="font-medium text-slate-800">Prince2</h4>
+                            <p class="text-slate-600 text-sm">Foundation & Practitioner</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <svg class="h-8 w-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                </svg>
+                            </div>
+                            <h4 class="font-medium text-slate-800">IDEO</h4>
+                            <p class="text-slate-600 text-sm">Human-Centered Design & Systems Thinking (Acumen)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results & Impact Section -->
+    <section id="impact" class="py-20 bg-orange-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Results & Impact</h2>
+                    <p class="text-xl text-slate-600">Quantified achievements demonstrating operational excellence</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-lg bg-white p-8 text-center">
+                        <div class="text-4xl font-bold text-amber-600 mb-4">40%</div>
+                        <p class="text-slate-600 leading-relaxed">Time saved on manual coordination through custom system design</p>
+                    </div>
+                    <div class="border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-lg bg-white p-8 text-center">
+                        <div class="text-4xl font-bold text-amber-600 mb-4">35%</div>
+                        <p class="text-slate-600 leading-relaxed">YoY growth in fellowship program reach</p>
+                    </div>
+                    <div class="border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-lg bg-white p-8 text-center">
+                        <div class="text-4xl font-bold text-amber-600 mb-4">60%</div>
+                        <p class="text-slate-600 leading-relaxed">Increase in pilot conversations through strategic BD workflows</p>
+                    </div>
+                    <div class="border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-lg bg-white p-8 text-center">
+                        <div class="text-4xl font-bold text-amber-600 mb-4">92%</div>
+                        <p class="text-slate-600 leading-relaxed">Satisfaction rate on accelerator program delivery</p>
+                    </div>
+                    <div class="border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-lg bg-white p-8 text-center">
+                        <div class="text-4xl font-bold text-amber-600 mb-4">£50k</div>
+                        <p class="text-slate-600 leading-relaxed">Additional funding secured through partnership development</p>
+                    </div>
+                    <div class="border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-lg bg-white p-8 text-center">
+                        <div class="text-4xl font-bold text-amber-600 mb-4">6+</div>
+                        <p class="text-slate-600 leading-relaxed">Early-stage ventures supported with strategic operations</p>
+                    </div>
+                </div>
+
+                <div class="mt-16 bg-gradient-to-r from-amber-50 to-orange-50 p-8 rounded-2xl">
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold text-slate-800 mb-4">Career Highlights</h3>
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-semibold text-slate-800 mb-3">Operational Excellence</h4>
+                                <ul class="text-left space-y-2">
+                                    <li class="flex items-start space-x-2">
+                                        <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span class="text-slate-600 text-sm">Designed systems reducing manual work by up to 40%</span>
+                                    </li>
+                                    <li class="flex items-start space-x-2">
+                                        <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span class="text-slate-600 text-sm">Managed global programs across 20+ countries</span>
+                                    </li>
+                                    <li class="flex items-start space-x-2">
+                                        <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span class="text-slate-600 text-sm">Delivered programs with 92% satisfaction rate</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-800 mb-3">Strategic Impact</h4>
+                                <ul class="text-left space-y-2">
+                                    <li class="flex items-start space-x-2">
+                                        <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span class="text-slate-600 text-sm">Supported founders in securing funding and partnerships</span>
+                                    </li>
+                                    <li class="flex items-start space-x-2">
+                                        <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span class="text-slate-600 text-sm">Created BD workflows still in use post-contract</span>
+                                    </li>
+                                    <li class="flex items-start space-x-2">
+                                        <svg class="h-4 w-4 text-amber-600 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span class="text-slate-600 text-sm">Facilitated partnerships with international innovation networks</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Let's Connect</h2>
+                    <p class="text-xl text-slate-600">
+                        Open to discussing opportunities where I can drive operational excellence
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-xl font-semibold text-slate-800 mb-4">Contact Information</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-3">
+                                    <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                    </svg>
+                                    <a href="mailto:chituruchikwem@gmail.com" class="text-slate-600 hover:text-amber-600 transition-colors">chituruchikwem@gmail.com</a>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <svg class="h-5 w-5 text-amber-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                    </svg>
+                                    <a href="https://www.linkedin.com/in/chituru-chikwem/" class="text-slate-600 hover:text-amber-600 transition-colors">
+                                        linkedin.com/in/chituru-chikwem
+                                    </a>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <svg class="h-5 w-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                    <span class="text-slate-600">London, UK | Remote-First</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-amber-50 p-6 rounded-lg border-l-4 border-amber-400">
+                            <h4 class="font-semibold text-slate-800 mb-2">Availability</h4>
+                            <p class="text-slate-600 text-sm mb-3">
+                                Available for new opportunities in strategic operations, executive support, and project leadership roles.
+                            </p>
+                            <p class="text-amber-700 text-sm font-medium">
+                                References available on request. Clients, collaborators, and past managers are happy to speak to performance, delivery, and leadership skills.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border-0 shadow-lg rounded-lg p-8">
+                        <form class="space-y-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="name" class="block text-slate-700 text-sm font-medium mb-1">Name</label>
+                                    <input id="name" type="text" placeholder="Your name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-slate-700 text-sm font-medium mb-1">Email</label>
+                                    <input id="email" type="email" placeholder="your@email.com" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="subject" class="block text-slate-700 text-sm font-medium mb-1">Subject</label>
+                                <input id="subject" type="text" placeholder="Opportunity discussion" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label for="message" class="block text-slate-700 text-sm font-medium mb-1">Message</label>
+                                <textarea id="message" placeholder="I'd love to discuss potential opportunities..." rows="5" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"></textarea>
+                            </div>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white flex-1 py-2 px-4 rounded-lg transition-colors">
+                                    Get in Touch
+                                </button>
+                                <button type="button" class="border border-amber-600 text-amber-600 hover:bg-amber-50 flex-1 bg-transparent py-2 px-4 rounded-lg transition-colors inline-flex items-center justify-center">
+                                    <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    Schedule a Chat
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto text-center">
+                <div class="mb-8">
+                    <h3 class="text-2xl font-semibold mb-2">Chituru Chikwem</h3>
+                    <p class="text-slate-300">
+                        Strategic operator and innovation-focused generalist | Executive Support & Project Leadership
+                    </p>
+                </div>
+                <div class="flex justify-center space-x-6 mb-8">
+                    <a href="https://www.linkedin.com/in/chituru-chikwem/" class="text-slate-300 hover:text-amber-400 transition-colors">
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                    <a href="mailto:chituruchikwem@gmail.com" class="text-slate-300 hover:text-amber-400 transition-colors">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="border-t border-slate-700 pt-8">
+                    <p class="text-slate-400 text-sm">
+                        © 2024 Chituru Chikwem. Available for strategic operations opportunities.
+                    </p>
+                    <p class="text-slate-500 text-xs mt-2">References and detailed work samples available upon request</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Download CV function
+        function downloadCV() {
+            // In a real implementation, this would download an actual CV file
+            alert('CV download functionality would be implemented here. This would typically link to a PDF file hosted on your server or cloud storage.');
+            
+            // Example of how you might implement this:
+            // const link = document.createElement('a');
+            // link.href = '/path/to/chituru-chikwem-cv.pdf';
+            // link.download = 'Chituru-Chikwem-CV.pdf';
+            // link.click();
+        }
+
+        // Project modal functions
+        function openProjectModal(projectId) {
+            document.getElementById(projectId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProjectModal(projectId) {
+            document.getElementById(projectId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.querySelectorAll('.project-modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+
+        // Add some interactive hover effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to skill tags
+            const skillTags = document.querySelectorAll('.skill-tag');
+            skillTags.forEach(tag => {
+                tag.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
+                tag.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+
+            // Add scroll-triggered animations for experience cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe experience and project cards
+            const cards = document.querySelectorAll('.experience-card, .project-card');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

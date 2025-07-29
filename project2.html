@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Team Excellence Accelerator | Chituru Chikwem Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #6366f1;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #6366f1;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8rem 0 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            font-weight: 300;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-alt {
+            background: #f8fafc;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Challenge & Solution */
+        .challenge-solution {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .challenge-card, .solution-card {
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .challenge-card {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-left: 4px solid #ef4444;
+        }
+
+        .solution-card {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border-left: 4px solid #22c55e;
+        }
+
+        .challenge-card:hover, .solution-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .challenge-icon {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .solution-icon {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1f2937;
+        }
+
+        .card-text {
+            color: #4b5563;
+            line-height: 1.7;
+        }
+
+        /* Results Grid */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+
+        .result-card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .result-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            background: #1f2937;
+            color: white;
+            padding: 6rem 0;
+        }
+
+        .dashboard-intro {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .dashboard-intro h2 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-intro p {
+            color: #9ca3af;
+            font-size: 1.1rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 3rem;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .chart-canvas {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Methodology Section */
+        .methodology-timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #6366f1, #8b5cf6);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 3rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-right: calc(50% + 2rem);
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: calc(50% + 2rem);
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: #6366f1;
+            border: 4px solid white;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+
+        .timeline-week {
+            color: #6366f1;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+            color: #1f2937;
+        }
+
+        .timeline-description {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* Skills Matrix */
+        .skills-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .skill-category {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-top: 4px solid #6366f1;
+        }
+
+        .skill-category-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .skill-name {
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .skill-level {
+            display: flex;
+            gap: 2px;
+        }
+
+        .skill-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #d1d5db;
+        }
+
+        .skill-dot.active {
+            background: #6366f1;
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .testimonial {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .testimonial::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            left: 2rem;
+            font-size: 3rem;
+            color: #6366f1;
+            opacity: 0.3;
+            font-family: serif;
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            color: #4b5563;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .testimonial-info h4 {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .testimonial-info p {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        /* Implementation Roadmap */
+        .roadmap-phases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .phase-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+        }
+
+        .phase-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .phase-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+        }
+
+        .phase-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .phase-description {
+            color: #6b7280;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5855eb;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #1f2937;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .challenge-solution {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                margin: 0;
+                margin-left: 3rem;
+            }
+            
+            .timeline-line {
+                left: 10px;
+            }
+            
+            .timeline-marker {
+                left: 10px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">Chituru Chikwem</div>
+            <div class="nav-links">
+                <a href="#overview">Overview</a>
+                <a href="#methodology">Methodology</a>
+                <a href="#results">Results</a>
+                <a href="#dashboard">Analytics</a>
+                <a href="#implementation">Implementation</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">PMO Excellence & Cross-Functional Leadership</div>
+            <h1>Remote Team Excellence Accelerator</h1>
+            <p class="hero-subtitle">
+                A comprehensive remote team performance optimization system demonstrating PMO expertise and leadership capabilities, achieving 20%+ productivity improvement through data-driven methodologies and cross-functional coordination.
+            </p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-number">27%</span>
+                    <span class="hero-stat-label">Productivity Increase</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">85%</span>
+                    <span class="hero-stat-label">Engagement Score</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">12</span>
+                    <span class="hero-stat-label">Team Members</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">6</span>
+                    <span class="hero-stat-label">Week Program</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Project Overview</h2>
+                <p class="section-subtitle">
+                    Addressing critical remote work challenges through systematic PMO methodologies and innovative leadership approaches.
+                </p>
+            </div>
+
+            <div class="challenge-solution fade-in">
+                <div class="challenge-card slide-in-left">
+                    <div class="card-icon challenge-icon">⚠️</div>
+                    <h3 class="card-title">The Challenge</h3>
+                    <p class="card-text">
+                        Remote teams across industries were experiencing significant productivity drops (15-30%), decreased engagement, and communication breakdowns. Traditional management approaches were proving inadequate for distributed workforce coordination, creating urgent need for systematic optimization frameworks.
+                    </p>
+                </div>
+
+                <div class="solution-card slide-in-right">
+                    <div class="card-icon solution-icon">✅</div>
+                    <h3 class="card-title">The Solution</h3>
+                    <p class="card-text">
+                        Developed a comprehensive Remote Team Excellence Framework combining PMO best practices with behavioral psychology insights. Implemented data-driven performance tracking, structured coaching protocols, and scalable engagement methodologies to create measurable productivity improvements.
+                    </p>
+                </div>
+            </div>
+
+            <div class="results-grid fade-in">
+                <div class="result-card">
+                    <span class="result-number">27%</span>
+                    <span class="result-label">Average Productivity Improvement</span>
+                </div>
+                <div class="result-card">
+                    <span class="result-number">4.2/5</span>
+                    <span class="result-label">Team Satisfaction Score</span>
+                </div>
+                <div class="result-card">
+                    <span class="result-number">92%</span>
+                    <span class="result-label">Framework Adoption Rate</span>
+                </div>
+                <div class="result-card">
+                    <span class="result-number">$180K</span>
+                    <span class="result-label">Estimated Annual ROI</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology Section -->
+    <section id="methodology" class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Implementation Methodology</h2>
+                <p class="section-subtitle">
+                    A structured 6-week approach combining research, pilot implementation, and scalable framework development.
+                </p>
+            </div>
+
+            <div class="methodology-timeline">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-week">Weeks 1-2</div>
+                        <h3 class="timeline-title">Research & Framework Design</h3>
+                        <p class="timeline-description">
+                            Conducted comprehensive analysis of current remote work productivity research, designed performance tracking methodology, and created team engagement assessment tools. Established baseline metrics and identified key performance indicators.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-week">Weeks 3-4</div>
+                        <h3 class="timeline-title">Pilot Implementation</h3>
+                        <p class="timeline-description">
+                            Recruited 12 professionals across 5 companies for pilot program via LinkedIn networking. Implemented performance tracking system, conducted weekly coaching sessions, and gathered real-time feedback for framework refinement.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-week">Weeks 5-6</div>
+                        <h3 class="timeline-title">Analysis & Scaling Strategy</h3>
+                        <p class="timeline-description">
+                            Analyzed performance improvements achieved, created comprehensive implementation guide, developed ROI calculations and business case. Prepared scalable framework for teams of 10-500+ people with customizable components.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Dashboard -->
+    <section id="dashboard" class="dashboard-section">
+        <div class="container">
+            <div class="dashboard-intro">
+                <h2 class="section-title">Performance Analytics Dashboard</h2>
+                <p>Real-time insights from the pilot program showcasing measurable improvements across key performance indicators.</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="chart-container">
+                    <h3 class="chart-title">Weekly Productivity Trends</h3>
+                    <div class="chart-canvas">
+                        <canvas id="productivityChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Team Engagement Scores</h3>
+                    <div class="chart-canvas">
+                        <canvas id="engagementChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Framework Adoption by Department</h3>
+                    <div class="chart-canvas">
+                        <canvas id="adoptionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">ROI Projection Analysis</h3>
+                    <div class="chart-canvas">
+                        <canvas id="roiChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Demonstration -->
+    <section id="results" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Skills Demonstrated</h2>
+                <p class="section-subtitle">
+                    Comprehensive showcase of PMO excellence, leadership capabilities, and innovative workplace optimization strategies.
+                </p>
+            </div>
+
+            <div class="skills-matrix">
+                <div class="skill-category">
+                    <h3 class="skill-category-title">🎯 PMO Excellence</h3>
+                    <div class="skill-item">
+                        <span class="skill-name">Process Design & Optimization</span>
+                        <div class="skill-level">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Performance Measurement</span>
+                        <div class="skill-level">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Stakeholder Coordination</span>
+                        <div class="skill-level">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Risk Management</span>
+                        <div class="skill-level">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3 class="skill-category-title">👥 Leadership</h3>
+                    <div class="skill-item">
+                        <span class="skill-name">Remote Team Management</span>
+                        <div class="skill-level">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Performance Coaching</span>
+                        <div class="skill-level">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Cross-Functional Collaboration</span>
+                        <div class="skill-level">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Change Management</span>
+                        <div class="skill-level">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3 class="skill-category-title">💡 Innovation</h3>
+                    <div class="skill-item">
+                        <span class="skill-name">Workplace Optimization</span>
+                        <div class="skill-level">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Data-Driven Decision Making</span>
+                        <div class="skill-level">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Technology Integration</span>
+                        <div class="skill-level">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-name">Strategic Planning</span>
+                        <div class="skill-level">
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot active"></div>
+                            <div class="skill-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Pilot Program Feedback</h2>
+                <p class="section-subtitle">
+                    Direct testimonials from pilot program participants showcasing real-world impact and satisfaction.
+                </p>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial fade-in">
+                    <p class="testimonial-content">
+                        "The framework completely transformed how our remote team operates. We saw a 32% productivity increase within just 4 weeks. Chituru's approach is both systematic and highly practical."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">SM</div>
+                        <div class="testimonial-info">
+                            <h4>Sarah Martinez</h4>
+                            <p>Engineering Manager, TechCorp</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial fade-in">
+                    <p class="testimonial-content">
+                        "Outstanding leadership and execution. The performance tracking system provided insights we never had before. Our team engagement scores improved from 65% to 87%."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">DJ</div>
+                        <div class="testimonial-info">
+                            <h4>David Johnson</h4>
+                            <p>Operations Director, GlobalSoft</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial fade-in">
+                    <p class="testimonial-content">
+                        "The coaching sessions were game-changing. Chituru's ability to identify bottlenecks and provide actionable solutions is exceptional. Highly recommend this program."
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">RK</div>
+                        <div class="testimonial-info">
+                            <h4>Rachel Kim</h4>
+                            <p>Product Lead, InnovateLabs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Implementation Roadmap -->
+    <section id="implementation" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Enterprise Implementation Roadmap</h2>
+                <p class="section-subtitle">
+                    Scalable deployment strategy for organizations of 10-500+ employees with customizable components.
+                </p>
+            </div>
+
+            <div class="roadmap-phases">
+                <div class="phase-card fade-in">
+                    <div class="phase-number">1</div>
+                    <h3 class="phase-title">Assessment Phase</h3>
+                    <p class="phase-description">
+                        Comprehensive team evaluation, baseline metric establishment, and customization planning. Duration: 2 weeks.
+                    </p>
+                </div>
+
+                <div class="phase-card fade-in">
+                    <div class="phase-number">2</div>
+                    <h3 class="phase-title">Framework Deployment</h3>
+                    <p class="phase-description">
+                        Implementation of tracking systems, training delivery, and initial coaching sessions. Duration: 4 weeks.
+                    </p>
+                </div>
+
+                <div class="phase-card fade-in">
+                    <div class="phase-number">3</div>
+                    <h3 class="phase-title">Optimization</h3>
+                    <p class="phase-description">
+                        Performance monitoring, iterative improvements, and advanced coaching interventions. Duration: 6 weeks.
+                    </p>
+                </div>
+
+                <div class="phase-card fade-in">
+                    <div class="phase-number">4</div>
+                    <h3 class="phase-title">Scale & Sustain</h3>
+                    <p class="phase-description">
+                        Organization-wide rollout, train-the-trainer programs, and long-term sustainability planning. Duration: 8 weeks.
+                    </p>
+                </div>
+            </div>
+
+            <div class="section-header" style="margin-top: 4rem;">
+                <h3 class="section-title" style="font-size: 2rem;">Deliverables Portfolio</h3>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <span class="result-label" style="font-size: 1rem; margin-bottom: 1rem;">Remote Team Excellence Framework</span>
+                    <p style="font-size: 0.9rem; opacity: 0.9;">Comprehensive 120-page guide with methodologies, templates, and best practices</p>
+                </div>
+                
+                <div class="result-card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <span class="result-label" style="font-size: 1rem; margin-bottom: 1rem;">Performance Dashboard Template</span>
+                    <p style="font-size: 0.9rem; opacity: 0.9;">Interactive tracking system with KPIs, metrics, and automated reporting</p>
+                </div>
+                
+                <div class="result-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                    <span class="result-label" style="font-size: 1rem; margin-bottom: 1rem;">Engagement Assessment Toolkit</span>
+                    <p style="font-size: 0.9rem; opacity: 0.9;">Survey instruments, interview guides, and analysis frameworks</p>
+                </div>
+                
+                <div class="result-card" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                    <span class="result-label" style="font-size: 1rem; margin-bottom: 1rem;">ROI Business Case</span>
+                    <p style="font-size: 0.9rem; opacity: 0.9;">Financial models, cost-benefit analysis, and implementation justification</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="cta-title">Ready to Transform Your Remote Team?</h2>
+            <p class="cta-subtitle">
+                Let's discuss how this proven framework can drive measurable productivity improvements and engagement in your organization.
+            </p>
+            <div class="cta-buttons">
+                <a href="mailto:chituru@example.com" class="btn btn-primary">Schedule Consultation</a>
+                <a href="#dashboard" class="btn btn-secondary">View Full Analytics</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Chart.js Configurations
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0,0,0,0.1)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        };
+
+        // Productivity Trends Chart
+        const productivityCtx = document.getElementById('productivityChart').getContext('2d');
+        new Chart(productivityCtx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                datasets: [{
+                    label: 'Team Productivity Index',
+                    data: [100, 105, 112, 118, 124, 127],
+                    borderColor: '#6366f1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#6366f1',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 6
+                }, {
+                    label: 'Industry Baseline',
+                    data: [100, 98, 97, 99, 101, 102],
+                    borderColor: '#e5e7eb',
+                    backgroundColor: 'rgba(229, 231, 235, 0.1)',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    fill: false,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                ...chartOptions,
+                scales: {
+                    ...chartOptions.scales,
+                    y: {
+                        ...chartOptions.scales.y,
+                        min: 95,
+                        max: 130,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Engagement Scores Chart
+        const engagementCtx = document.getElementById('engagementChart').getContext('2d');
+        new Chart(engagementCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Communication', 'Collaboration', 'Innovation', 'Work-Life Balance', 'Goal Clarity', 'Recognition'],
+                datasets: [{
+                    label: 'Post-Program',
+                    data: [4.2, 4.5, 4.1, 4.3, 4.4, 4.0],
+                    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                    borderColor: '#6366f1',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#6366f1'
+                }, {
+                    label: 'Pre-Program',
+                    data: [3.1, 2.8, 2.9, 3.2, 3.0, 2.7],
+                    backgroundColor: 'rgba(229, 231, 235, 0.2)',
+                    borderColor: '#9ca3af',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#9ca3af'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 5,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+
+        // Adoption Chart
+        const adoptionCtx = document.getElementById('adoptionChart').getContext('2d');
+        new Chart(adoptionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Engineering', 'Marketing', 'Sales', 'HR', 'Operations'],
+                datasets: [{
+                    data: [95, 88, 92, 85, 90],
+                    backgroundColor: [
+                        '#6366f1',
+                        '#8b5cf6',
+                        '#ec4899',
+                        '#f59e0b',
+                        '#10b981'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+
+        // ROI Projection Chart
+        const roiCtx = document.getElementById('roiChart').getContext('2d');
+        new Chart(roiCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                datasets: [{
+                    label: 'Cost Savings ($K)',
+                    data: [25, 45, 65, 85],
+                    backgroundColor: '#10b981',
+                    borderRadius: 6
+                }, {
+                    label: 'Productivity Gains ($K)',
+                    data: [30, 55, 80, 95],
+                    backgroundColor: '#6366f1',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                ...chartOptions,
+                scales: {
+                    ...chartOptions.scales,
+                    y: {
+                        ...chartOptions.scales.y,
+                        ticks: {
+                            callback: function(value) {
+                                return value + 'K';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.result-card, .testimonial, .phase-card, .skill-category').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Counter animation for hero stats
+        function animateCounter(element, target, duration = 2000) {
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                
+                if (target.toString().includes('%')) {
+                    element.textContent = Math.floor(current) + '%';
+                } else if (target.toString().includes('K')) {
+                    element.textContent = Math.floor(current) + 'K';
+                } else if (target.toString().includes('.')) {
+                    element.textContent = current.toFixed(1) + '/5';
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+
+        // Animate hero stats when page loads
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const stats = document.querySelectorAll('.hero-stat-number');
+                const values = [27, 85, 12, 6];
+                const formats = ['%', '%', '', ''];
+                
+                stats.forEach((stat, index) => {
+                    animateCounter(stat, values[index]);
+                });
+            }, 500);
+        });
+
+        // Dynamic navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

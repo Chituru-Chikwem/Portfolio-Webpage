@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airtel Nigeria Supplier Performance Analytics</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e53e3e 0%, #fc8181 50%, #feb2b2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1500px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(15px);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 15px,
+                rgba(255, 255, 255, 0.05) 15px,
+                rgba(255, 255, 255, 0.05) 30px
+            );
+            animation: slide 25s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(-60px) rotate(0deg); }
+            100% { transform: translateX(60px) rotate(360deg); }
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-overview {
+            padding: 40px;
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            border-bottom: 2px solid #feb2b2;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .overview-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(229, 62, 62, 0.1);
+            border-left: 5px solid #e53e3e;
+            transition: transform 0.3s ease;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .overview-card h3 {
+            color: #e53e3e;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .overview-card p {
+            color: #4a5568;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .scale-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 0 40px 40px;
+        }
+
+        .scale-card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 12px 30px rgba(229, 62, 62, 0.15);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .scale-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(229, 62, 62, 0.2);
+        }
+
+        .scale-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #e53e3e, #fc8181, #feb2b2);
+        }
+
+        .scale-value {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #e53e3e;
+            margin-bottom: 12px;
+        }
+
+        .scale-label {
+            font-size: 0.95rem;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 600;
+        }
+
+        .scale-description {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .performance-metrics {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            background: #f7fafc;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+        }
+
+        .metric-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #38a169, #48bb78, #68d391);
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #38a169, #48bb78);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-label {
+            font-size: 1rem;
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .metric-trend {
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .trend-positive {
+            background-color: #c6f6d5;
+            color: #22543d;
+        }
+
+        .trend-excellent {
+            background-color: #bee3f8;
+            color: #2a4365;
+        }
+
+        .charts-grid {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
+            gap: 35px;
+        }
+
+        .chart-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            border-top: 4px solid #e53e3e;
+        }
+
+        .chart-panel:hover {
+            transform: translateY(-5px);
+        }
+
+        .chart-title {
+            font-size: 1.4rem;
+            color: #2d3748;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .full-width .chart-container {
+            height: 450px;
+        }
+
+        .insights-section {
+            padding: 40px;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+        }
+
+        .insights-title {
+            text-align: center;
+            color: #2d3748;
+            margin-bottom: 35px;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .insight-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+            border-left: 5px solid #38a169;
+            transition: transform 0.3s ease;
+        }
+
+        .insight-card:hover {
+            transform: translateX(10px);
+        }
+
+        .insight-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #38a169;
+            margin-bottom: 12px;
+        }
+
+        .insight-title {
+            color: #2d3748;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .insight-description {
+            color: #4a5568;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .methodology-tabs {
+            padding: 0 40px;
+        }
+
+        .tab-navigation {
+            display: flex;
+            background: #edf2f7;
+            border-radius: 15px 15px 0 0;
+            overflow: hidden;
+            margin-bottom: 0;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 18px 25px;
+            background: #e2e8f0;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            color: #4a5568;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #e53e3e;
+            transform: translateY(-3px);
+            box-shadow: 0 -5px 15px rgba(229, 62, 62, 0.1);
+        }
+
+        .tab-content {
+            background: white;
+            padding: 35px;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .methodology-item {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f7fafc;
+            border-radius: 12px;
+            border-left: 5px solid #e53e3e;
+            transition: background 0.3s ease;
+        }
+
+        .methodology-item:hover {
+            background: #edf2f7;
+        }
+
+        .methodology-title {
+            color: #e53e3e;
+            font-weight: 700;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .methodology-description {
+            color: #4a5568;
+            line-height: 1.7;
+        }
+
+        .deliverable-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .deliverable-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .deliverable-item:hover {
+            background: #edf2f7;
+            transform: translateX(15px);
+        }
+
+        .deliverable-number {
+            background: linear-gradient(135deg, #e53e3e, #fc8181);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .deliverable-content {
+            flex: 1;
+        }
+
+        .deliverable-title {
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .deliverable-desc {
+            color: #4a5568;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .risk-indicator {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .risk-low {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .risk-medium {
+            background: #fefcbf;
+            color: #744210;
+        }
+
+        .risk-high {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>Airtel Nigeria Multi-Market Supplier Performance</h1>
+            <p>Optimization Initiative Dashboard | August 2022 - September 2024</p>
+        </div>
+
+        <div class="project-overview">
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <h3>Strategic Challenge</h3>
+                    <p>Inconsistent supplier performance across 12 regional markets with limited visibility into product portfolio effectiveness. Required standardized evaluation frameworks to optimize performance for 40M+ customers while ensuring regulatory compliance.</p>
+                </div>
+                <div class="overview-card">
+                    <h3>Project Objectives</h3>
+                    <p>Develop unified supplier assessment system, optimize product mix for enhanced customer value, ensure 100% regulatory compliance across all markets, and establish predictive analytics for performance optimization.</p>
+                </div>
+                <div class="overview-card">
+                    <h3>Implementation Scope</h3>
+                    <p>Comprehensive supplier performance management system coordinating with 50+ vendors across 12 regional markets, managing 200+ product offerings with advanced SQL-based tracking and automated KPI reporting.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="scale-metrics">
+            <div class="scale-card">
+                <div class="scale-value">50+</div>
+                <div class="scale-label">Vendors Managed</div>
+                <div class="scale-description">Cross-regional supplier network</div>
+            </div>
+            <div class="scale-card">
+                <div class="scale-value">12</div>
+                <div class="scale-label">Regional Markets</div>
+                <div class="scale-description">Multi-market coordination</div>
+            </div>
+            <div class="scale-card">
+                <div class="scale-value">40M+</div>
+                <div class="scale-label">Customers Served</div>
+                <div class="scale-description">Large-scale impact</div>
+            </div>
+            <div class="scale-card">
+                <div class="scale-value">200+</div>
+                <div class="scale-label">Product Offerings</div>
+                <div class="scale-description">Portfolio optimization</div>
+            </div>
+            <div class="scale-card">
+                <div class="scale-value">24</div>
+                <div class="scale-label">Months Duration</div>
+                <div class="scale-description">Long-term initiative</div>
+            </div>
+        </div>
+
+        <div class="performance-metrics">
+            <div class="metric-card">
+                <div class="metric-value">15%</div>
+                <div class="metric-label">Customer Base Growth</div>
+                <div class="metric-trend trend-positive">↗ Portfolio Optimization</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">35%</div>
+                <div class="metric-label">Operational Efficiency</div>
+                <div class="metric-trend trend-positive">↗ Process Standardization</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">100%</div>
+                <div class="metric-label">Regulatory Compliance</div>
+                <div class="metric-trend trend-excellent">✓ Excellence Maintained</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">12%</div>
+                <div class="metric-label">Cost Optimization</div>
+                <div class="metric-trend trend-positive">↗ Strategic Negotiations</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-panel">
+                <div class="chart-title">Regional Market Performance</div>
+                <div class="chart-container">
+                    <canvas id="regionalChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-panel">
+                <div class="chart-title">Supplier Performance Distribution</div>
+                <div class="chart-container">
+                    <canvas id="supplierChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-panel full-width">
+                <div class="chart-title">Product Portfolio Performance Trend Analysis</div>
+                <div class="chart-container">
+                    <canvas id="portfolioChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-panel">
+                <div class="chart-title">Compliance Metrics by Category</div>
+                <div class="chart-container">
+                    <canvas id="complianceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-panel">
+                <div class="chart-title">Risk Assessment Matrix</div>
+                <div class="chart-container">
+                    <canvas id="riskChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-panel full-width">
+                <div class="chart-title">Supplier Evaluation Framework Scoring</div>
+                <div class="chart-container">
+                    <canvas id="evaluationChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="methodology-tabs">
+            <div class="tab-navigation">
+                <button class="tab-button active" onclick="showMethodologyTab('assessment')">Assessment Framework</button>
+                <button class="tab-button" onclick="showMethodologyTab('analytics')">Data Analytics</button>
+                <button class="tab-button" onclick="showMethodologyTab('coordination')">Cross-Functional Coordination</button>
+                <button class="tab-button" onclick="showMethodologyTab('deliverables')">Key Deliverables</button>
+            </div>
+            <div class="tab-content">
+                <div id="assessment" class="methodology-panel">
+                    <div class="methodology-item">
+                        <div class="methodology-title">Comprehensive Vendor Evaluation Matrix</div>
+                        <div class="methodology-description">Created multi-dimensional assessment framework covering quality metrics, cost optimization, regulatory compliance, and customer satisfaction indicators. Implemented weighted scoring system with quarterly performance benchmarking.</div>
+                    </div>
+                    <div class="methodology-item">
+                        <div class="methodology-title">Risk Assessment Protocols</div>
+                        <div class="methodology-description">Developed predictive risk models for supplier reliability and market stability assessment. Established early warning systems for potential performance degradation and supply chain disruptions.</div>
+                    </div>
+                    <div class="methodology-item">
+                        <div class="methodology-title">Standardized Performance Reviews</div>
+                        <div class="methodology-description">Implemented quarterly supplier performance reviews with standardized reporting templates and KPI tracking. Created escalation procedures for underperformance and improvement action plans.</div>
+                    </div>
+                </div>
+                <div id="analytics" class="methodology-panel" style="display: none;">
+                    <div class="methodology-item">
+                        <div class="methodology-title">SQL-Based Tracking System</div>
+                        <div class="methodology-description">Built comprehensive database infrastructure monitoring 200+ product offerings across 12 regional markets. Implemented real-time data collection and automated performance tracking with historical trend analysis.</div>
+                    </div>
+                    <div class="methodology-item">
+                        <div class="methodology-title">Advanced Excel Dashboards</div>
+                        <div class="methodology-description">Created executive-level dashboards with automated KPI reporting for management review. Integrated pivot tables, conditional formatting, and dynamic charting for actionable insights.</div>
+                    </div>
+                    <div class="methodology-item">
+                        <div class="methodology-title">Predictive Analytics Implementation</div>
+                        <div class="methodology-description">Developed predictive models to identify underperforming products and at-risk supplier relationships. Implemented machine learning algorithms for demand forecasting and performance optimization.</div>
+                    </div>
+                </div>
+                <div id="coordination" class="methodology-panel" style="display: none;">
+                    <div class="methodology-item">
+                        <div class="methodology-title">Monthly Supplier Review Meetings</div>
+                        <div class="methodology-description">Led cross-functional meetings with internal stakeholders including sales, marketing, operations, and legal teams. Facilitated collaborative decision-making and strategic alignment across all business units.</div>
+                    </div>
+                    <div class="methodology-item">
+                        <div class="methodology-title">Regulatory Body Coordination</div>
+                        <div class="methodology-description">Maintained active relationships with regulatory authorities to ensure compliance across all supplier agreements. Implemented proactive compliance monitoring and reporting systems.</div>
+                    </div>
+                    <div class="methodology-item">
+                        <div class="methodology-title">Escalation Process Management</div>
+                        <div class="methodology-description">Designed and managed escalation procedures for supplier performance issues and contract renegotiations. Established clear communication protocols and resolution timelines.</div>
+                    </div>
+                </div>
+                <div id="deliverables" class="methodology-panel" style="display: none;">
+                    <div class="deliverable-list">
+                        <div class="deliverable-item">
+                            <div class="deliverable-number">1</div>
+                            <div class="deliverable-content">
+                                <div class="deliverable-title">Unified Supplier Evaluation System</div>
+                                <div class="deliverable-desc">Comprehensive assessment criteria and scoring methodology with automated performance tracking and benchmarking capabilities.</div>
+                            </div>
+                        </div>
+                        <div class="deliverable-item">
+                            <div class="deliverable-number">2</div>
+                            <div class="deliverable-content">
+                                <div class="deliverable-title">Product Portfolio Performance Dashboard</div>
+                                <div class="deliverable-desc">Real-time analytics platform tracking product performance, customer satisfaction metrics, and market penetration across all regions.</div>
+                            </div>
+                        </div>
+                        <div class="deliverable-item">
+                            <div class="deliverable-number">3</div>
+                            <div class="deliverable-content">
+                                <div class="deliverable-title">Supplier Risk Management Framework</div>
+                                <div class="deliverable-desc">Early warning system for supplier reliability issues with predictive analytics and automated risk assessment protocols.</div>
+                            </div>
+                        </div>
+                        <div class="deliverable-item">
+                            <div class="deliverable-number">4</div>
+                            <div class="deliverable-content">
+                                <div class="deliverable-title">Regulatory Compliance Monitoring System</div>
+                                <div class="deliverable-desc">Automated tracking and reporting system ensuring 100% compliance across all markets and supplier agreements with real-time alerts.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="insights-section">
+            <h2 class="insights-title">Strategic Impact & Business Results</h2>
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-value">15%</div>
+                    <div class="insight-title">Customer Base Expansion</div>
+                    <div class="insight-description">Achieved significant customer growth through optimized product portfolio and enhanced supplier performance across all regional markets.</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-value">35%</div>
+                    <div class="insight-title">Operational Efficiency Gains</div>
+                    <div class="insight-description">Reduced supplier management overhead through standardized processes, automated reporting, and streamlined evaluation procedures.</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-value">100%</div>
+                    <div class="insight-title">Compliance Excellence</div>
+                    <div class="insight-description">Maintained perfect regulatory compliance across all markets and supplier agreements through proactive monitoring and systematic compliance management.</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-value">12%</div>
+                    <div class="insight-title">Cost Optimization Achievement</div>
+                    <div class="insight-description">Delivered substantial cost savings through strategic supplier negotiations, performance-based contracting, and operational efficiency improvements.</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-value">200+</div>
+                    <div class="insight-title">Products Optimized</div>
+                    <div class="insight-description">Successfully optimized entire product portfolio through data-driven analysis, customer feedback integration, and market performance evaluation.</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-value">50+</div>
+                    <div class="insight-title">Supplier Partnerships Enhanced</div>
+                    <div class="insight-description">Strengthened vendor relationships through transparent evaluation processes, collaborative improvement initiatives, and strategic partnership development.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Regional Market Performance Chart
+        const regionalCtx = document.getElementById('regionalChart').getContext('2d');
+        new Chart(regionalCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Lagos', 'Abuja', 'Kano', 'Port Harcourt', 'Ibadan', 'Kaduna', 'Benin', 'Maiduguri', 'Jos', 'Ilorin', 'Aba', 'Onitsha'],
+                datasets: [{
+                    label: 'Performance Score',
+                    data: [92, 89, 85, 87, 90, 83, 86, 82, 88, 85, 84, 87],
+                    backgroundColor: [
+                        '#e53e3e', '#fc8181', '#feb2b2', '#e53e3e', '#fc8181', '#feb2b2',
+                        '#e53e3e', '#fc8181', '#feb2b2', '#e53e3e', '#fc8181', '#feb2b2'
+                    ],
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: {
+                            color: 'rgba(0,0,0,0.1)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Supplier Performance Distribution
+        const supplierCtx = document.getElementById('supplierChart').getContext('2d');
+        new Chart(supplierCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Excellent (90-100)', 'Good (80-89)', 'Average (70-79)', 'Below Average (60-69)', 'Poor (<60)'],
+                datasets: [{
+                    data: [18, 22, 8, 2, 0],
+                    backgroundColor: [
+                        '#38a169', '#48bb78', '#fbd38d', '#fc8181', '#e53e3e'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+
+        // Portfolio Performance Trend
+        const portfolioCtx = document.getElementById('portfolioChart').getContext('2d');
+        new Chart(portfolioCtx, {
+            type: 'line',
+            data: {
+                labels: ['Aug 2022', 'Nov 2022', 'Feb 2023', 'May 2023', 'Aug 2023', 'Nov 2023', 'Feb 2024', 'May 2024', 'Sep 2024'],
+                datasets: [
+                    {
+                        label: 'Customer Satisfaction',
+                        data: [72, 75, 78, 82, 85, 87, 89, 91, 93],
+                        borderColor: '#38a169',
+                        backgroundColor: 'rgba(56, 161, 105, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    },
+                    {
+                        label: 'Product Performance',
+                        data: [68, 71, 74, 78, 81, 84, 86, 88, 90],
+                        borderColor: '#e53e3e',
+                        backgroundColor: 'rgba(229, 62, 62, 0.08)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: {
+                            color: 'rgba(0,0,0,0.08)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+
+        // Compliance Metrics by Category
+        const complianceCtx = document.getElementById('complianceChart').getContext('2d');
+        new Chart(complianceCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Contract', 'Regulatory', 'Quality', 'Financial', 'Operational'],
+                datasets: [{
+                    label: 'Compliance (%)',
+                    data: [100, 100, 98, 97, 99],
+                    backgroundColor: [
+                        '#38a169', '#48bb78', '#68d391', '#e53e3e', '#fc8181'
+                    ],
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: {
+                            color: 'rgba(0,0,0,0.1)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Risk Assessment Matrix
+        const riskCtx = document.getElementById('riskChart').getContext('2d');
+        new Chart(riskCtx, {
+            type: 'polarArea',
+            data: {
+                labels: ['Supply Risk', 'Compliance Risk', 'Financial Risk', 'Operational Risk', 'Market Risk'],
+                datasets: [{
+                    data: [12, 5, 8, 10, 7],
+                    backgroundColor: [
+                        '#fc8181', '#fbd38d', '#68d391', '#bee3f8', '#feb2b2'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+
+        // Supplier Evaluation Framework Scoring
+        const evaluationCtx = document.getElementById('evaluationChart').getContext('2d');
+        new Chart(evaluationCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Quality', 'Cost', 'Delivery', 'Compliance', 'Innovation', 'Support'],
+                datasets: [
+                    {
+                        label: 'Vendor A',
+                        data: [92, 88, 90, 100, 85, 87],
+                        backgroundColor: 'rgba(56, 161, 105, 0.15)',
+                        borderColor: '#38a169',
+                        pointBackgroundColor: '#38a169'
+                    },
+                    {
+                        label: 'Vendor B',
+                        data: [85, 90, 87, 98, 80, 83],
+                        backgroundColor: 'rgba(229, 62, 62, 0.12)',
+                        borderColor: '#e53e3e',
+                        pointBackgroundColor: '#e53e3e'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { display: false },
+                        suggestedMin: 70,
+                        suggestedMax: 100,
+                        pointLabels: {
+                            font: { size: 14 }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+
+        // Methodology Tabs Functionality
+        function showMethodologyTab(tabId) {
+            const panels = document.querySelectorAll('.methodology-panel');
+            panels.forEach(panel => {
+                panel.style.display = (panel.id === tabId) ? 'block' : 'none';
+            });
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach((btn, idx) => {
+                btn.classList.toggle('active', btn.getAttribute('onclick').includes(tabId));
+            });
+        }
+    </script>
+</body>
+</html>

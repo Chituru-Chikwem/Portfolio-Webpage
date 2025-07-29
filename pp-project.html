@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product & Market Intelligence | Turning Data Into Strategy</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M 8 0 L 0 0 0 8" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: drift 25s ease-in-out infinite;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translateX(0px) translateY(0px); }
+            25% { transform: translateX(10px) translateY(-10px); }
+            50% { transform: translateX(-5px) translateY(10px); }
+            75% { transform: translateX(-10px) translateY(-5px); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            position: relative;
+            max-width: 1200px;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #a855f7, #ec4899, #f59e0b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            animation: pulse 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.3)); }
+            to { filter: drop-shadow(0 0 35px rgba(236, 72, 153, 0.5)); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #e2e8f0;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .impact-summary {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1));
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 2rem auto;
+            max-width: 900px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .impact-summary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.1), transparent);
+            animation: shimmer 4s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .impact-summary p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #f1f5f9;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .impact-highlight {
+            color: #a855f7;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .metric-card:hover::before {
+            left: 100%;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 20px 40px rgba(168, 85, 247, 0.15);
+        }
+
+        .metric-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #a855f7;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #ffffff, #e2e8f0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .challenge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .challenge-card {
+            background: linear-gradient(145deg, rgba(239, 68, 68, 0.1), rgba(185, 28, 28, 0.05));
+            border-left: 4px solid #ef4444;
+            border-radius: 0 20px 20px 0;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .challenge-card:hover {
+            transform: translateX(10px);
+            box-shadow: -10px 20px 40px rgba(239, 68, 68, 0.1);
+        }
+
+        .challenge-icon {
+            position: absolute;
+            top: -15px;
+            left: -2px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .process-timeline {
+            position: relative;
+            margin: 4rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #a855f7, #ec4899, #f59e0b);
+            transform: translateX(-50%);
+        }
+
+        .timeline-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .timeline-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-step:nth-child(even) .step-content {
+            text-align: right;
+        }
+
+        .step-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 0 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .step-content:hover {
+            transform: scale(1.02);
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        .step-number {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            z-index: 2;
+            border: 4px solid #1e1b4b;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+        }
+
+        .chart-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #f1f5f9;
+            text-align: center;
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1));
+            border-left: 4px solid #a855f7;
+            padding: 1.8rem;
+            margin: 2rem 0;
+            border-radius: 0 16px 16px 0;
+            position: relative;
+        }
+
+        .insight-box::before {
+            content: '💡';
+            position: absolute;
+            top: -10px;
+            left: -2px;
+            background: #a855f7;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .insight-box h4 {
+            color: #a855f7;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            margin-left: 1rem;
+        }
+
+        .insight-box p {
+            margin-left: 1rem;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .before-after-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .before-card {
+            border-left: 4px solid #ef4444;
+        }
+
+        .after-card {
+            border-left: 4px solid #22c55e;
+        }
+
+        .before-after-card:hover {
+            transform: scale(1.03);
+        }
+
+        .card-label {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .before-label {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .after-label {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .outcomes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .outcome-card {
+            background: linear-gradient(145deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .outcome-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .outcome-card:hover::before {
+            opacity: 1;
+        }
+
+        .outcome-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(34, 197, 94, 0.4);
+            box-shadow: 0 20px 40px rgba(34, 197, 94, 0.1);
+        }
+
+        .outcome-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .outcome-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #22c55e;
+            margin-bottom: 0.5rem;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(236, 72, 153, 0.15));
+            border-radius: 24px;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin: 4rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 0.8rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(168, 85, 247, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section {
+                padding: 3rem 1rem;
+            }
+            
+            .timeline-line {
+                left: 20px;
+            }
+            
+            .timeline-step {
+                flex-direction: row !important;
+                padding-left: 60px;
+            }
+            
+            .timeline-step .step-content {
+                text-align: left !important;
+                margin-left: 2rem;
+                margin-right: 0;
+            }
+            
+            .step-number {
+                left: 20px;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Product & Market Intelligence</h1>
+            <p class="hero-subtitle">From Data Confusion to Strategic Clarity</p>
+            <p>Transforming a failing B2B fintech launch into a growth success story through evidence-based customer insights</p>
+            
+            <div class="impact-summary">
+                <p><strong>Challenge:</strong> Despite strong marketing engagement, a B2B fintech product had <span class="impact-highlight">&lt;10% activation rate</span> and stalling conversions.</p>
+                <p><strong>My Solution:</strong> Conducted behavioral analysis and customer interviews to discover we were targeting the wrong buyer persona.</p>
+                <p><strong>Result:</strong> <span class="impact-highlight">3x increase in onboarding completion</span>, activation rate improved from <span class="impact-highlight">9% → 24%</span>, and <span class="impact-highlight">18% reduction</span> in customer acquisition costs.</p>
+            </div>
+            
+            <div class="metrics-bar">
+                <div class="metric-card">
+                    <span class="metric-number">3x</span>
+                    <span class="metric-label">Onboarding Completion</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">24%</span>
+                    <span class="metric-label">Activation Rate (from 9%)</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">-18%</span>
+                    <span class="metric-label">Customer Acquisition Cost</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number">2Q</span>
+                    <span class="metric-label">Time to Impact</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Challenge Section -->
+    <section class="section animate-on-scroll">
+        <h2 class="section-title">The Problem</h2>
+        <div class="challenge-grid">
+            <div class="challenge-card">
+                <div class="challenge-icon">!</div>
+                <h3>Engagement vs. Revenue Gap</h3>
+                <p>Strong trial signups (500+ accounts) but less than 10% reached activation milestones. Marketing was working, but something was fundamentally broken in the product experience.</p>
+            </div>
+            <div class="challenge-card">
+                <div class="challenge-icon">❌</div>
+                <h3>Feature Mismatch</h3>
+                <p>Core features designed for financial analysts were being completely ignored, while basic dashboarding tools saw 4x higher engagement. Clear signal of product-market misalignment.</p>
+            </div>
+            <div class="challenge-card">
+                <div class="challenge-icon">🔄</div>
+                <h3>High Onboarding Drop-off</h3>
+                <p>Users were abandoning the product during the initial setup flow, suggesting our value proposition wasn't resonating with the people actually using the product.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Timeline -->
+    <section class="section animate-on-scroll">
+        <h2 class="section-title">Investigation Process</h2>
+        <div class="process-timeline">
+            <div class="timeline-line"></div>
+            
+            <div class="timeline-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Behavioral Data Deep Dive</h3>
+                    <p>Analyzed usage patterns from 500 trial accounts using Mixpanel. Discovered that dashboarding and forecasting tools had 4x the engagement compared to transaction-level features. This was our first major clue that we misunderstood user priorities.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Customer Interview Program</h3>
+                    <p>Conducted 8 qualitative interviews with both drop-offs and converted users. The breakthrough insight: CFOs were the real decision-makers, not analysts. They needed strategic oversight, not operational efficiency tools.</p>
+                </div>
+            </div>
+            
+            <div class="timeline-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Message-to-Behavior Audit</h3>
+                    <p>Cross-referenced marketing messaging, onboarding flows, and actual user behavior. Found critical disconnect: we were selling "save your analysts time" to people who needed "give your CFO confidence in forecasts."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Analysis -->
+    <section class="section animate-on-scroll">
+        <h2 class="section-title">Key Insights from Data</h2>
+        
+        <div class="chart-container">
+            <div class="chart-title">Feature Engagement Analysis</div>
+            <div class="chart-wrapper">
+                <canvas id="engagementChart"></canvas>
+            </div>
+            <div class="insight-box">
+                <h4>Critical Discovery:</h4>
+                <p>Executive dashboards and forecasting tools dominated usage, while detailed transaction features (our original focus) were largely ignored. This revealed we were building for the wrong user persona entirely.</p>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">User Journey Drop-off Points</div>
+            <div class="chart-wrapper">
+                <canvas id="funnelChart"></canvas>
+            </div>
+            <div class="insight-box">
+                <h4>Onboarding Bottleneck:</h4>
+                <p>67% of users dropped off during feature setup, specifically when configuring analyst-focused tools. This confirmed our hypothesis about persona mismatch.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Before vs After -->
+    <section class="section animate-on-scroll">
+        <h2 class="section-title">Strategic Repositioning</h2>
+        
+        <div class="comparison-grid">
+            <div class="before-after-card before-card">
+                <div class="card-label before-label">Before</div>
+                <h3>Original Positioning</h3>
+                <ul style="list-style: none; padding: 0; margin-top: 1.5rem;">
+                    <li style="margin-bottom: 1rem;">🎯 <strong>Target:</strong> Financial Analysts</li>
+                    <li style="margin-bottom: 1rem;">💡 <strong>Value Prop:</strong> "Automate your workflows"</li>
+                    <li style="margin-bottom: 1rem;">🔧 <strong>Features:</strong> Transaction-level analysis</li>
+                    <li style="margin-bottom: 1rem;">📊 <strong>Messaging:</strong> "Save your analysts time"</li>
+                </ul>
+            </div>
+            
+            <div class="before-after-card after-card">
+                <div class="card-label after-label">After</div>
+                <h3>Refined Positioning</h3>
+                <ul style="list-style: none; padding: 0; margin-top: 1.5rem;">
+                    <li style="margin-bottom: 1rem;">🎯 <strong>Target:</strong> CFOs (50-200 employees)</li>
+                    <li style="margin-bottom: 1rem;">💡 <strong>Value Prop:</strong> "Own your forecasting narrative"</li>
+                    <li style="margin-bottom: 1rem;">🔧 <strong>Features:</strong> Executive dashboards & forecasts</li>
+                    <li style="margin-bottom: 1rem;">📊 <strong>Messaging:</strong> "Give your CFO visibility and confidence"</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Performance Before vs After Repositioning</div>
+            <div class="chart-wrapper">
+                <canvas id="performanceChart"></canvas>
+            </div>
+            <div class="insight-box">
+                <h4>Transformation Results:</h4>
+                <p>The repositioning delivered immediate impact across all key metrics. Most importantly, customer acquisition costs dropped significantly as we attracted higher-intent, better-fit prospects.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Impact -->
+    <section class="section animate-on-scroll">
+        <h2 class="section-title">Business Outcomes</h2>
+        
+        <div class="outcomes-grid">
+            <div class="outcome-card">
+                <span class="outcome-icon">📈</span>
+                <div class="outcome-value">300%</div>
+                <div class="outcome-label">Onboarding Completion Increase</div>
+            </div>
+            <div class="outcome-card">
+                <span class="outcome-icon">🎯</span>
+                <div class="outcome-value">9% → 24%</div>
+                <div class="outcome-label">Activation Rate Improvement</div>
+            </div>
+            <div class="outcome-card">
+                <span class="outcome-icon">💰</span>
+                <div class="outcome-value">-18%</div>
+                <div class="outcome-label">Customer Acquisition Cost</div>
+            </div>
+            <div class="outcome-card">
+                <span class="outcome-icon">🚀</span>
+                <div class="outcome-value">2 Quarters</div>
+                <div class="outcome-label">Time to Full Impact</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Monthly Performance Progression</div>
+            <div class="chart-wrapper">
+                <canvas id="progressChart"></canvas>
+            </div>
+            <div class="insight-box">
+                <h4>Sustained Growth:</h4>
+                <p>The improvements weren't just a one-time boost. The refined positioning created a foundation for consistent month-over-month growth in both activation and conversion rates.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Learnings -->
+    <section class="section animate-on-scroll">
+        <div class="cta-section">
+            <div class="cta-content">
+                <h2>Key Strategic Insights</h2>
+                <p style="font-size: 1.2rem; margin: 2rem 0; color: #cbd5e1; max-width: 800px; margin-left: auto; margin-right: auto;">This project reinforced that <strong>positioning is a living thing</strong> — and product-market fit isn't fixed at launch. A fast, evidence-based feedback loop can unlock hidden traction by revealing who your real customers are and what they actually need.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 3rem 0; text-align: left;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: #a855f7; margin-bottom: 0.5rem;">Behavior > Surveys</h4>
+                        <p style="font-size: 0.95rem;">User actions reveal more truth than survey responses</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: #a855f7; margin-bottom: 0.5rem;">Cross-Team Alignment</h4>
+                        <p style="font-size: 0.95rem;">Product + Marketing alignment is non-negotiable for success</p>
+                    </div>
+                </div>
+                
+                <a href="#" class="cta-button" onclick="scrollToTop()">View More Projects</a>
+                <a href="mailto:contact@example.com" class="cta-button">Discuss This Case</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Chart.js default settings
+        Chart.defaults.color = '#cbd5e1';
+        Chart.defaults.backgroundColor = 'rgba(168, 85, 247, 0.1)';
+        Chart.defaults.borderColor = 'rgba(168, 85, 247, 0.3)';
+
+        // Feature Engagement Chart
+        const engagementCtx = document.getElementById('engagementChart').getContext('2d');
+        new Chart(engagementCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Executive Dashboards', 'Forecasting Tools', 'Basic Reporting', 'Transaction Analysis', 'Workflow Automation', 'Advanced Analytics'],
+                datasets: [{
+                    label: 'Daily Active Usage (%)',
+                    data: [76, 68, 45, 19, 15, 12],
+                    backgroundColor: [
+                        'rgba(34, 197, 94, 0.8)',
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(168, 85, 247, 0.8)',
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(249, 115, 22, 0.8)',
+                        'rgba(156, 163, 175, 0.8)'
+                    ],
+                    borderRadius: 8,
+                    borderWidth: 2,
+                    borderColor: [
+                        'rgba(34, 197, 94, 1)',
+                        'rgba(59, 130, 246, 1)',
+                        'rgba(168, 85, 247, 1)',
+                        'rgba(239, 68, 68, 1)',
+                        'rgba(249, 115, 22, 1)',
+                        'rgba(156, 163, 175, 1)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: { display: true, text: 'Usage Rate (%)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        title: { display: true, text: 'Product Features' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }
+                }
+            }
+        });
+
+        // Funnel Chart
+        const funnelCtx = document.getElementById('funnelChart').getContext('2d');
+        new Chart(funnelCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Trial Signup', 'Account Setup', 'Feature Configuration', 'First Analysis', 'Activation Complete'],
+                datasets: [{
+                    label: 'User Completion (%)',
+                    data: [100, 85, 33, 18, 9],
+                    backgroundColor: [
+                        'rgba(34, 197, 94, 0.8)',
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(168, 85, 247, 0.8)',
+                        'rgba(249, 115, 22, 0.8)',
+                        'rgba(239, 68, 68, 0.8)'
+                    ],
+                    borderRadius: 12
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: { display: true, text: 'Completion Rate (%)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        title: { display: true, text: 'Onboarding Steps' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+
+        // Performance Comparison Chart
+        const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+        new Chart(performanceCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Onboarding Completion', 'Feature Adoption', 'User Engagement', 'Conversion Rate', 'Customer Satisfaction', 'Retention'],
+                datasets: [{
+                    label: 'Before Repositioning',
+                    data: [28, 35, 42, 9, 51, 33],
+                    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                    borderColor: 'rgba(239, 68, 68, 1)',
+                    pointBackgroundColor: 'rgba(239, 68, 68, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(239, 68, 68, 1)'
+                }, {
+                    label: 'After Repositioning',
+                    data: [84, 76, 81, 24, 78, 67],
+                    backgroundColor: 'rgba(34, 197, 94, 0.2)',
+                    borderColor: 'rgba(34, 197, 94, 1)',
+                    pointBackgroundColor: 'rgba(34, 197, 94, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(34, 197, 94, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        angleLines: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Monthly Progress Chart
+        const progressCtx = document.getElementById('progressChart').getContext('2d');
+        new Chart(progressCtx, {
+            type: 'line',
+            data: {
+                labels: ['Month 1', 'Month 2', 'Month 3', 'Month 4', 'Month 5', 'Month 6'],
+                datasets: [{
+                    label: 'Activation Rate (%)',
+                    data: [9, 12, 16, 19, 22, 24],
+                    borderColor: 'rgba(168, 85, 247, 1)',
+                    backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: 'rgba(168, 85, 247, 1)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }, {
+                    label: 'Customer Acquisition Cost (Index)',
+                    data: [100, 95, 88, 85, 83, 82],
+                    borderColor: 'rgba(236, 72, 153, 1)',
+                    backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: 'rgba(236, 72, 153, 1)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }, {
+                    label: 'Onboarding Completion (%)',
+                    data: [28, 35, 52, 68, 78, 84],
+                    borderColor: 'rgba(34, 197, 94, 1)',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: 'rgba(34, 197, 94, 1)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 120,
+                        title: { display: true, text: 'Performance Metrics' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        title: { display: true, text: 'Timeline After Repositioning' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                }
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll to top
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Enhanced metric card interactions
+        document.querySelectorAll('.metric-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-12px) scale(1.03)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add particles background effect
+        function createParticles() {
+            const canvas = document.createElement('canvas');
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.pointerEvents = 'none';
+            canvas.style.zIndex = '-1';
+            canvas.style.opacity = '0.08';
+            document.body.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3,
+                    size: Math.random() * 2 + 1,
+                    color: Math.random() > 0.5 ? '#a855f7' : '#ec4899'
+                });
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                    
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+                });
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+            
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+        
+        // Initialize particles
+        setTimeout(createParticles, 1000);
+
+        // Progress bar
+        const progressBar = document.createElement('div');
+        progressBar.style.position = 'fixed';
+        progressBar.style.top = '0';
+        progressBar.style.left = '0';
+        progressBar.style.width = '0%';
+        progressBar.style.height = '3px';
+        progressBar.style.background = 'linear-gradient(90deg, #a855f7, #ec4899)';
+        progressBar.style.zIndex = '1000';
+        progressBar.style.transition = 'width 0.1s ease';
+        document.body.appendChild(progressBar);
+        
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + '%';
+        });
+
+        // Enhanced tooltips
+        Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(30, 27, 75, 0.95)';
+        Chart.defaults.plugins.tooltip.titleColor = '#f1f5f9';
+        Chart.defaults.plugins.tooltip.bodyColor = '#cbd5e1';
+        Chart.defaults.plugins.tooltip.borderColor = 'rgba(168, 85, 247, 0.3)';
+        Chart.defaults.plugins.tooltip.borderWidth = 1;
+        Chart.defaults.plugins.tooltip.cornerRadius = 12;
+
+                console.log('🎯 Product Intelligence Case Study Loaded Successfully!');
+            </script>
+        </body>
+        </html>
