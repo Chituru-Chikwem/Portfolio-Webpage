@@ -49,89 +49,59 @@
             text-align: center;
             z-index: 1;
             position: relative;
-            max-width: 1200px;
-            padding: 0 2rem;
+            max-width: 1000px;
+            padding: 2rem;
         }
 
-        .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
             font-weight: 800;
-            background: linear-gradient(135deg, #60a5fa, #c084fc, #f472b6);
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff, #cbd5e1, #60a5fa);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 1.5rem;
-            animation: glow 3s ease-in-out infinite alternate;
+            text-shadow: 0 0 30px rgba(96, 165, 250, 0.3);
         }
 
-        @keyframes glow {
-            from { filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.3)); }
-            to { filter: drop-shadow(0 0 30px rgba(192, 132, 252, 0.5)); }
-        }
-
-        .hero p {
-            font-size: 1.25rem;
+        .hero-content > p {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
             color: #cbd5e1;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
         }
 
         .project-summary {
-            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.1));
-            border: 1px solid rgba(34, 197, 94, 0.3);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
             border-radius: 20px;
-            padding: 2rem;
-            margin: 2rem auto;
-            max-width: 900px;
-            text-align: center;
+            padding: 2.5rem;
+            margin: 3rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-summary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(34, 197, 94, 0.1), transparent);
-            animation: shimmer 3s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 100%; }
         }
 
         .project-summary p {
             font-size: 1.1rem;
-            line-height: 1.7;
             color: #f1f5f9;
-            margin: 0;
-            position: relative;
-            z-index: 1;
+            font-style: italic;
+            line-height: 1.7;
         }
 
-        .project-summary strong {
-            color: #22c55e;
-            font-weight: 600;
-        
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
+            gap: 1.5rem;
             margin-top: 3rem;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(145deg, rgba(147, 51, 234, 0.15), rgba(59, 130, 246, 0.15));
             border-radius: 20px;
             padding: 2rem;
-            backdrop-filter: blur(10px);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -153,20 +123,20 @@
         }
 
         .stat-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(96, 165, 250, 0.3);
-            box-shadow: 0 20px 40px rgba(96, 165, 250, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(147, 51, 234, 0.2);
         }
 
         .stat-number {
+            display: block;
             font-size: 2.5rem;
             font-weight: 800;
             color: #60a5fa;
-            display: block;
+            margin-bottom: 0.5rem;
         }
 
         .stat-label {
-            color: #94a3b8;
+            color: #cbd5e1;
             font-size: 0.9rem;
             margin-top: 0.5rem;
         }
@@ -341,16 +311,18 @@
         }
 
         .cta-button {
-            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
             color: white;
-            padding: 1rem 2rem;
             border: none;
+            padding: 1rem 2rem;
             border-radius: 12px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin: 0 0.5rem;
+            margin: 0.5rem;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .cta-button:hover {
@@ -360,18 +332,118 @@
 
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Added navigation button styles */
+        .nav-button-container {
+            text-align: center;
             margin: 3rem 0;
+            padding: 2rem 0;
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            border: none;
+            padding: 1.2rem 2.5rem;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.2);
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.4);
+        }
+
+        .nav-button:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        .nav-button-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-button:hover .nav-button-icon {
+            transform: translateX(3px);
+        }
+
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            margin: 4rem 0;
+        }
+
+        /* Added back button styles for technical analysis page */
+        .back-button {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 114, 128, 0.3);
         }
 
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .section {
-                padding: 3rem 1rem;
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
             }
             
             .workflow-diagram {
@@ -379,23 +451,24 @@
             }
             
             .workflow-step::after {
-                content: '↓';
-                right: 50%;
-                transform: translateX(50%);
-                top: auto;
-                bottom: -15px;
+                display: none;
             }
-        }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
 
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
+            .nav-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
 
-        .animate-on-scroll.animated {
-            opacity: 1;
-            transform: translateY(0);
+            .back-button {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 2rem;
+            }
         }
     </style>
 </head>
@@ -428,6 +501,14 @@
                     <span class="stat-label">SMEs Evaluated</span>
                 </div>
             </div>
+
+            <!-- Added first navigation button after hero stats -->
+            <div class="nav-button-container">
+                <a href="technical-analysis-v5.html" class="nav-button">
+                    <span>Explore Technical Deep Dive</span>
+                    <span class="nav-button-icon">🔬</span>
+                </a>
+            </div>
         </div>
     </section>
 
@@ -457,9 +538,6 @@
     <section class="section animate-on-scroll">
         <h2 class="section-title">Alternative Data Integration</h2>
         
-
-
-        
         <div class="chart-container">
             <div class="chart-title">Data Sources Contributing to Credit Score</div>
             <div class="chart-wrapper">
@@ -470,6 +548,16 @@
                 <p>Mobile money transactions proved to be the strongest predictor of repayment behavior, accounting for 35% of the model's predictive power. This validates the importance of alternative data in underserved markets.</p>
             </div>
         </div>
+
+        <!-- Added second navigation button after data integration section -->
+        <div class="nav-button-container">
+            <a href="technical-analysis-v5.html" class="nav-button">
+                <span>View Model Architecture & Algorithms</span>
+                <span class="nav-button-icon">⚙️</span>
+            </a>
+        </div>
+
+        <div class="section-divider"></div>
 
         <div class="metrics-grid">
             <div class="chart-container">
@@ -555,6 +643,14 @@
                 <p>The model particularly excelled at identifying creditworthy women-led businesses, increasing their approval rate by 45%. This demonstrates AI's potential to reduce bias in traditional lending.</p>
             </div>
         </div>
+
+        <!-- Added third navigation button after business impact section -->
+        <div class="nav-button-container">
+            <a href="technical-analysis-v5.html" class="nav-button">
+                <span>Analyze Detailed Performance Metrics</span>
+                <span class="nav-button-icon">📊</span>
+            </a>
+        </div>
     </section>
 
     <!-- Technology Stack -->
@@ -595,8 +691,18 @@
             <h2>Future Opportunities</h2>
             <p style="font-size: 1.2rem; margin: 2rem 0; color: #cbd5e1;">This project opens doors to cross-border trade finance, blockchain integration, and partnerships with development banks for broader financial inclusion initiatives.</p>
             
+            <!-- Added final navigation button in CTA section -->
+            <div style="margin: 2rem 0;">
+                <a href="technical-analysis-v5.html" class="nav-button">
+                    <span>Complete Technical Analysis</span>
+                    <span class="nav-button-icon">🚀</span>
+                </a>
+            </div>
+
+            <div class="section-divider"></div>
+            
             <button class="cta-button" onclick="scrollToTop()">Explore More</button>
-            <button class="cta-button" onclick="window.open('mailto:contact@example.com', '_blank')">Get In Touch</button>
+            <button class="cta-button" onclick="window.open('mailto:chituruchikwem@gmail.com', '_blank')">Get In Touch</button>
         </div>
     </section>
 
@@ -606,32 +712,61 @@
         Chart.defaults.backgroundColor = 'rgba(96, 165, 250, 0.1)';
         Chart.defaults.borderColor = 'rgba(96, 165, 250, 0.3)';
 
+        // Chart.js configurations and data
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#cbd5e1',
+                        font: {
+                            family: 'Inter'
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: '#94a3b8' },
+                    grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                },
+                y: {
+                    ticks: { color: '#94a3b8' },
+                    grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                }
+            }
+        };
+
         // Data Sources Chart
         const dataSourceCtx = document.getElementById('dataSourceChart').getContext('2d');
         new Chart(dataSourceCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Mobile Money', 'Telco Usage', 'Utility Payments', 'Business Metrics', 'Social Signals'],
+                labels: ['Mobile Money', 'Business Metrics', 'Banking History', 'Digital Footprint', 'Demographics'],
                 datasets: [{
-                    data: [35, 25, 20, 15, 5],
+                    data: [35, 25, 20, 12, 8],
                     backgroundColor: [
-                        'rgba(34, 197, 94, 0.8)',
-                        'rgba(59, 130, 246, 0.8)',
-                        'rgba(147, 51, 234, 0.8)',
-                        'rgba(236, 72, 153, 0.8)',
-                        'rgba(249, 115, 22, 0.8)'
+                        '#8b5cf6',
+                        '#3b82f6',
+                        '#06b6d4',
+                        '#10b981',
+                        '#f59e0b'
                     ],
-                    borderWidth: 2,
-                    borderColor: '#1e293b'
+                    borderWidth: 0
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                ...chartOptions,
                 plugins: {
+                    ...chartOptions.plugins,
                     legend: {
                         position: 'bottom',
-                        labels: { padding: 20, usePointStyle: true }
+                        labels: {
+                            color: '#cbd5e1',
+                            padding: 20,
+                            font: { family: 'Inter' }
+                        }
                     }
                 }
             }
@@ -642,40 +777,31 @@
         new Chart(performanceCtx, {
             type: 'radar',
             data: {
-                labels: ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'AUC-ROC', 'Fairness'],
+                labels: ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'AUC-ROC', 'Speed'],
                 datasets: [{
                     label: 'AI Model',
-                    data: [87, 84, 89, 86, 91, 82],
-                    backgroundColor: 'rgba(96, 165, 250, 0.2)',
-                    borderColor: 'rgba(96, 165, 250, 1)',
-                    pointBackgroundColor: 'rgba(96, 165, 250, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(96, 165, 250, 1)'
+                    data: [92, 89, 94, 91, 96, 98],
+                    borderColor: '#8b5cf6',
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    pointBackgroundColor: '#8b5cf6'
                 }, {
                     label: 'Traditional Model',
-                    data: [72, 68, 74, 71, 76, 65],
-                    backgroundColor: 'rgba(239, 68, 68, 0.2)',
-                    borderColor: 'rgba(239, 68, 68, 1)',
-                    pointBackgroundColor: 'rgba(239, 68, 68, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(239, 68, 68, 1)'
+                    data: [76, 72, 68, 70, 74, 15],
+                    borderColor: '#ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    pointBackgroundColor: '#ef4444'
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                ...chartOptions,
                 scales: {
                     r: {
                         beginAtZero: true,
                         max: 100,
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        angleLines: { color: 'rgba(255, 255, 255, 0.1)' }
+                        ticks: { color: '#94a3b8' },
+                        grid: { color: 'rgba(148, 163, 184, 0.2)' },
+                        pointLabels: { color: '#cbd5e1' }
                     }
-                },
-                plugins: {
-                    legend: { position: 'bottom' }
                 }
             }
         });
@@ -685,39 +811,20 @@
         new Chart(riskCtx, {
             type: 'bar',
             data: {
-                labels: ['800-900', '700-799', '600-699', '500-599', '400-499', '300-399'],
+                labels: ['Very Low Risk', 'Low Risk', 'Medium Risk', 'High Risk', 'Very High Risk'],
                 datasets: [{
                     label: 'Default Rate (%)',
-                    data: [2.1, 4.8, 8.3, 15.2, 28.7, 42.1],
+                    data: [2.1, 4.8, 12.3, 28.7, 45.2],
                     backgroundColor: [
-                        'rgba(34, 197, 94, 0.8)',
-                        'rgba(101, 163, 13, 0.8)',
-                        'rgba(234, 179, 8, 0.8)',
-                        'rgba(249, 115, 22, 0.8)',
-                        'rgba(239, 68, 68, 0.8)',
-                        'rgba(185, 28, 28, 0.8)'
-                    ],
-                    borderRadius: 8
+                        '#10b981',
+                        '#06b6d4',
+                        '#f59e0b',
+                        '#ef4444',
+                        '#dc2626'
+                    ]
                 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Default Rate (%)' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                    },
-                    x: {
-                        title: { display: true, text: 'Credit Score Range' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                    }
-                }
-            }
+            options: chartOptions
         });
 
         // Processing Time Chart
@@ -725,68 +832,46 @@
         new Chart(timeCtx, {
             type: 'bar',
             data: {
-                labels: ['Traditional Process', 'AI-Powered Process'],
+                labels: ['Traditional Method', 'AI Model'],
                 datasets: [{
-                    label: 'Processing Time (Hours)',
-                    data: [72, 0.17],
-                    backgroundColor: ['rgba(239, 68, 68, 0.8)', 'rgba(34, 197, 94, 0.8)'],
-                    borderRadius: 12
+                    label: 'Processing Time (minutes)',
+                    data: [4320, 10], // 3 days vs 10 minutes
+                    backgroundColor: ['#ef4444', '#10b981']
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
+                ...chartOptions,
                 scales: {
+                    ...chartOptions.scales,
                     y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Time (Hours)' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                    },
-                    x: {
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        ...chartOptions.scales.y,
+                        type: 'logarithmic'
                     }
                 }
             }
         });
 
-        // Approval Trends Chart
+        // Monthly Approval Trends
         const approvalCtx = document.getElementById('approvalChart').getContext('2d');
         new Chart(approvalCtx, {
             type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
                 datasets: [{
-                    label: 'Approval Rate (%)',
-                    data: [45, 52, 58, 64, 69, 73, 76, 78, 81, 83, 85, 87],
-                    borderColor: 'rgba(96, 165, 250, 1)',
-                    backgroundColor: 'rgba(96, 165, 250, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 6,
-                    pointHoverRadius: 8
+                    label: 'Traditional Model',
+                    data: [24, 26, 25, 23, 27, 25],
+                    borderColor: '#ef4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'AI Model',
+                    data: [35, 38, 42, 39, 44, 41],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4
                 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        title: { display: true, text: 'Approval Rate (%)' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                    },
-                    x: {
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                    }
-                }
-            }
+            options: chartOptions
         });
 
         // Portfolio Quality Chart
@@ -794,38 +879,22 @@
         new Chart(qualityCtx, {
             type: 'line',
             data: {
-                labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                labels: ['Month 1', 'Month 3', 'Month 6', 'Month 9', 'Month 12'],
                 datasets: [{
-                    label: '30-Day Delinquency (%)',
-                    data: [8.2, 6.8, 5.9, 4.7],
-                    borderColor: 'rgba(239, 68, 68, 1)',
+                    label: 'Traditional Portfolio NPL %',
+                    data: [3.2, 4.1, 5.8, 7.2, 8.9],
+                    borderColor: '#ef4444',
                     backgroundColor: 'rgba(239, 68, 68, 0.1)',
                     tension: 0.4
                 }, {
-                    label: '90-Day Delinquency (%)',
-                    data: [4.1, 3.2, 2.8, 2.1],
-                    borderColor: 'rgba(34, 197, 94, 1)',
-                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    label: 'AI Portfolio NPL %',
+                    data: [2.1, 2.8, 3.4, 4.1, 4.7],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
                     tension: 0.4
                 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Delinquency Rate (%)' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                    },
-                    x: {
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                    }
-                },
-                plugins: {
-                    legend: { position: 'bottom' }
-                }
-            }
+            options: chartOptions
         });
 
         // Demographic Impact Chart
@@ -833,38 +902,18 @@
         new Chart(demographicCtx, {
             type: 'bar',
             data: {
-                labels: ['Women-led', 'Youth-led', 'Rural', 'Urban', 'Micro', 'Small', 'Medium'],
+                labels: ['Women-led', 'Youth-led', 'Rural', 'Urban', 'Micro', 'Small'],
                 datasets: [{
-                    label: 'Traditional Approval (%)',
-                    data: [32, 28, 25, 48, 35, 52, 68],
-                    backgroundColor: 'rgba(239, 68, 68, 0.7)',
-                    borderRadius: 6
+                    label: 'Traditional Approval %',
+                    data: [18, 22, 19, 28, 15, 32],
+                    backgroundColor: '#ef4444'
                 }, {
-                    label: 'AI-Enhanced Approval (%)',
-                    data: [77, 71, 68, 82, 73, 86, 91],
-                    backgroundColor: 'rgba(34, 197, 94, 0.7)',
-                    borderRadius: 6
+                    label: 'AI Model Approval %',
+                    data: [32, 35, 29, 42, 28, 45],
+                    backgroundColor: '#10b981'
                 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'bottom' }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        title: { display: true, text: 'Approval Rate (%)' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                    },
-                    x: {
-                        title: { display: true, text: 'Business Category' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                    }
-                }
-            }
+            options: chartOptions
         });
 
         // Scroll animations
@@ -876,7 +925,7 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('animated');
+                    entry.target.classList.add('visible');
                 }
             });
         }, observerOptions);
@@ -893,251 +942,35 @@
             });
         }
 
-        // Add hover effects to stat cards
-        document.querySelectorAll('.stat-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'translateY(-10px) scale(1.05)';
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // Enhanced tech badge interactions
-        document.querySelectorAll('.tech-badge').forEach(badge => {
-            badge.addEventListener('click', () => {
-                // Create a ripple effect
-                const ripple = document.createElement('div');
-                ripple.style.position = 'absolute';
-                ripple.style.borderRadius = '50%';
-                ripple.style.background = 'rgba(96, 165, 250, 0.6)';
-                ripple.style.transform = 'scale(0)';
-                ripple.style.animation = 'ripple 0.6s linear';
-                ripple.style.left = '50%';
-                ripple.style.top = '50%';
-                ripple.style.width = ripple.style.height = '10px';
-                ripple.style.marginLeft = ripple.style.marginTop = '-5px';
-                
-                badge.style.position = 'relative';
-                badge.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-            });
-        });
-
-        // Add CSS for ripple animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to {
-                    transform: scale(4);
-                    opacity: 0;
-                }
-            }
-            
-            @keyframes countUp {
-                from { opacity: 0; transform: translateY(20px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            
-            .stat-number {
-                animation: countUp 0.8s ease-out;
-            }
-            
-            .process-card:nth-child(2) {
-                animation-delay: 0.1s;
-            }
-            
-            .process-card:nth-child(3) {
-                animation-delay: 0.2s;
-            }
-            
-            .tech-badge:hover {
-                box-shadow: 0 8px 25px rgba(96, 165, 250, 0.15);
-            }
-            
-            .chart-container:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Add loading animation for charts
-        function animateChart(chart) {
-            chart.data.datasets.forEach((dataset, i) => {
-                const meta = chart.getDatasetMeta(i);
-                meta.data.forEach((element, index) => {
-                    element._model.y = chart.chartArea.bottom;
-                });
-            });
-            chart.render();
-            
-            setTimeout(() => {
-                chart.data.datasets.forEach((dataset, i) => {
-                    const meta = chart.getDatasetMeta(i);
-                    meta.data.forEach((element, index) => {
-                        delete element._model.y;
+        // Note: The technical-analysis-v5.html file must be present in the same directory
+        // for the navigation links to work properly
+        
+        // Add smooth scrolling for internal navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
                     });
-                });
-                chart.update();
-            }, 100);
-        }
-
-        // Add particle background effect
-        function createParticles() {
-            const canvas = document.createElement('canvas');
-            canvas.style.position = 'fixed';
-            canvas.style.top = '0';
-            canvas.style.left = '0';
-            canvas.style.width = '100%';
-            canvas.style.height = '100%';
-            canvas.style.pointerEvents = 'none';
-            canvas.style.zIndex = '-1';
-            canvas.style.opacity = '0.1';
-            document.body.appendChild(canvas);
-            
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            const particles = [];
-            
-            for (let i = 0; i < 50; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.5,
-                    vy: (Math.random() - 0.5) * 0.5,
-                    size: Math.random() * 2 + 1
-                });
-            }
-            
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                particles.forEach(particle => {
-                    particle.x += particle.vx;
-                    particle.y += particle.vy;
-                    
-                    if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-                    if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
-                    
-                    ctx.beginPath();
-                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                    ctx.fillStyle = '#60a5fa';
-                    ctx.fill();
-                });
-                
-                requestAnimationFrame(animate);
-            }
-            
-            animate();
-            
-            window.addEventListener('resize', () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            });
-        }
-        
-        // Initialize particles after page load
-        setTimeout(createParticles, 1000);
-
-        // Add scroll progress indicator
-        const progressBar = document.createElement('div');
-        progressBar.style.position = 'fixed';
-        progressBar.style.top = '0';
-        progressBar.style.left = '0';
-        progressBar.style.width = '0%';
-        progressBar.style.height = '3px';
-        progressBar.style.background = 'linear-gradient(90deg, #60a5fa, #c084fc)';
-        progressBar.style.zIndex = '1000';
-        progressBar.style.transition = 'width 0.1s ease';
-        document.body.appendChild(progressBar);
-        
-        window.addEventListener('scroll', () => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            progressBar.style.width = scrolled + '%';
-        });
-
-        // Enhanced CTA button interactions
-        document.querySelectorAll('.cta-button').forEach(button => {
-            button.addEventListener('mouseenter', () => {
-                button.style.transform = 'translateY(-3px) scale(1.02)';
-                button.style.boxShadow = '0 15px 35px rgba(139, 92, 246, 0.4)';
-            });
-            
-            button.addEventListener('mouseleave', () => {
-                button.style.transform = 'translateY(0) scale(1)';
-                button.style.boxShadow = '0 10px 25px rgba(139, 92, 246, 0.3)';
-            });
-            
-            button.addEventListener('click', (e) => {
-                // Create click animation
-                const rect = button.getBoundingClientRect();
-                const ripple = document.createElement('span');
-                const size = Math.max(rect.width, rect.height);
-                const x = e.clientX - rect.left - size / 2;
-                const y = e.clientY - rect.top - size / 2;
-                
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = x + 'px';
-                ripple.style.top = y + 'px';
-                ripple.classList.add('ripple');
-                
-                button.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-            });
-        });
-
-        // Add typewriter effect to hero title
-        function typeWriter(element, text, speed = 100) {
-            let i = 0;
-            element.innerHTML = '';
-            
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
                 }
-            }
-            
-            type();
-        }
-
-        // Initialize typewriter effect after a delay
-        setTimeout(() => {
-            const heroTitle = document.querySelector('.hero h1');
-            const originalText = heroTitle.textContent;
-            typeWriter(heroTitle, originalText, 80);
-        }, 500);
-
-        // Add floating animation to workflow steps
-        document.querySelectorAll('.workflow-step').forEach((step, index) => {
-            step.style.animationDelay = `${index * 0.2}s`;
-            step.style.animation = 'float 6s ease-in-out infinite';
+            });
         });
-
-        // Enhanced chart tooltips with custom styling
-        Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(15, 15, 35, 0.95)';
-        Chart.defaults.plugins.tooltip.titleColor = '#f1f5f9';
-        Chart.defaults.plugins.tooltip.bodyColor = '#cbd5e1';
-        Chart.defaults.plugins.tooltip.borderColor = 'rgba(96, 165, 250, 0.3)';
-        Chart.defaults.plugins.tooltip.borderWidth = 1;
-        Chart.defaults.plugins.tooltip.cornerRadius = 12;
-        Chart.defaults.plugins.tooltip.displayColors = true;
-        Chart.defaults.plugins.tooltip.usePointStyle = true;
-
-        console.log('🚀 AI Credit Scoring Dashboard Loaded Successfully!');
     </script>
+
+    <!-- 
+    REQUIRED FILES FOR FULL FUNCTIONALITY:
+    - technical-analysis-v5.html (must be in same directory)
+    
+    EXTERNAL DEPENDENCIES:
+    - Chart.js CDN (loaded from cdnjs.cloudflare.com)
+    - Inter font (loaded from system fonts)
+    
+    NAVIGATION BEHAVIOR:
+    - All "Technical Analysis" buttons open in the same tab
+    - To open in new tab, add target="_blank" to the anchor tags
+    -->
 </body>
 </html>
