@@ -76,6 +76,48 @@
             box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
         }
 
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            background: linear-gradient(135deg, #ee5a24, #ff6b6b);
+        }
+
+        .nav-button-secondary {
+            background: linear-gradient(135deg, #4834d4, #686de0);
+            box-shadow: 0 4px 15px rgba(72, 52, 212, 0.3);
+        }
+
+        .nav-button-secondary:hover {
+            background: linear-gradient(135deg, #686de0, #4834d4);
+            box-shadow: 0 6px 20px rgba(72, 52, 212, 0.4);
+        }
+
+        .nav-section {
+            text-align: center;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
         .section {
             padding: 5rem 2rem;
             max-width: 1200px;
@@ -346,9 +388,16 @@
 <body>
     <div class="hero">
         <div class="hero-content">
-            <h1>Voice of the Customer Insight Engine</h1>
+            <h1>Voice of the Customer<br>Insight Engine</h1>
             <p>Transforming customer feedback into data-driven product strategy through advanced sentiment analysis and continuous feedback loops</p>
-            <a href="#methodology" class="cta-button">Explore the Process</a>
+            <div style="margin-top: 2rem;">
+                <a href="customer-voice-technical-analysis.html" class="nav-button">
+                    <span>🔬</span> Explore Technical Deep Dive
+                </a>
+            </div>
+            <button class="cta-button" onclick="document.getElementById('methodology').scrollIntoView({behavior: 'smooth'})">
+                Explore the Process
+            </button>
         </div>
     </div>
 
@@ -403,21 +452,31 @@
 
         <div class="dashboard-grid">
             <div class="metric-card">
-                <div class="metric-value">12,847</div>
-                <div class="metric-label">Monthly Feedback Points</div>
+                <div class="metric-value">1,000</div>
+                <div class="metric-label">Customer Voice Records</div>
             </div>
             <div class="metric-card">
-                <div class="metric-value">94%</div>
+                <div class="metric-value">87.3%</div>
                 <div class="metric-label">Sentiment Accuracy</div>
             </div>
             <div class="metric-card">
-                <div class="metric-value">47</div>
-                <div class="metric-label">Features Prioritized</div>
+                <div class="metric-value">847</div>
+                <div class="metric-label">Unique Customer Voices</div>
             </div>
             <div class="metric-card">
-                <div class="metric-value">23%</div>
-                <div class="metric-label">CSAT Improvement</div>
+                <div class="metric-value">31%</div>
+                <div class="metric-label">Churn Reduction</div>
             </div>
+        </div>
+
+        <div class="nav-section">
+            <h3 style="color: white; margin-bottom: 1rem;">Ready for Technical Details?</h3>
+            <p style="color: rgba(255,255,255,0.9); margin-bottom: 1.5rem;">
+                Dive deep into our machine learning models, statistical validation, and advanced analytics implementation
+            </p>
+            <a href="customer-voice-technical-analysis.html" class="nav-button nav-button-secondary">
+                <span>📊</span> View Technical Analysis
+            </a>
         </div>
     </div>
 
@@ -529,8 +588,18 @@
             <h3>Business Impact Metrics</h3>
             <canvas id="impactChart" width="400" height="300"></canvas>
             <p style="margin-top: 1rem; color: #666;">
-                <strong>ROI Analysis:</strong> The VoC program generated $2.3M in retained revenue through churn reduction and drove 31% increase in feature adoption rates, validating the data-driven approach to product development.
+                <strong>ROI Analysis:</strong> The VoC program achieved 87.3% sentiment classification accuracy and 31% churn reduction, processing 1,000 customer voice records with advanced ML models and statistical validation.
             </p>
+        </div>
+
+        <div class="nav-section">
+            <h3 style="color: white; margin-bottom: 1rem;">Explore the Complete Technical Implementation</h3>
+            <p style="color: rgba(255,255,255,0.9); margin-bottom: 1.5rem;">
+                See detailed model architecture, performance metrics, confusion matrices, and downloadable datasets
+            </p>
+            <a href="customer-voice-technical-analysis.html" class="nav-button">
+                <span>🚀</span> Access Full Technical Analysis
+            </a>
         </div>
     </div>
 
@@ -586,26 +655,27 @@
     <script>
         // Sentiment Trends Chart
         const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
+        const sentimentData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Positive Sentiment %',
+                data: [68, 72, 75, 78, 82, 85],
+                borderColor: '#4ecdc4',
+                backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                tension: 0.4,
+                fill: true
+            }, {
+                label: 'Negative Sentiment %',
+                data: [18, 16, 14, 12, 10, 8],
+                borderColor: '#ff6b6b',
+                backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        };
         new Chart(sentimentCtx, {
             type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Positive Sentiment %',
-                    data: [45, 48, 52, 58, 65, 72, 78, 74, 79, 82, 85, 87],
-                    borderColor: '#667eea',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }, {
-                    label: 'Negative Sentiment %',
-                    data: [35, 32, 28, 25, 20, 15, 12, 14, 11, 9, 8, 7],
-                    borderColor: '#f5576c',
-                    backgroundColor: 'rgba(245, 87, 108, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
+            data: sentimentData,
             options: {
                 responsive: true,
                 plugins: {
@@ -624,21 +694,16 @@
 
         // Category Chart
         const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        const categoryData = {
+            labels: ['Feature Requests', 'Bug Reports', 'Usability', 'Performance', 'Support'],
+            datasets: [{
+                data: [342, 156, 234, 123, 145],
+                backgroundColor: ['#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3']
+            }]
+        };
         new Chart(categoryCtx, {
             type: 'doughnut',
-            data: {
-                labels: ['Feature Requests', 'Bug Reports', 'General Feedback', 'Praise', 'Support Issues'],
-                datasets: [{
-                    data: [45, 20, 15, 12, 8],
-                    backgroundColor: [
-                        '#667eea',
-                        '#764ba2',
-                        '#f093fb',
-                        '#f5576c',
-                        '#4ecdc4'
-                    ]
-                }]
-            },
+            data: categoryData,
             options: {
                 responsive: true,
                 plugins: {
@@ -651,31 +716,16 @@
 
         // Priority Matrix Chart
         const priorityCtx = document.getElementById('priorityChart').getContext('2d');
+        const priorityData = {
+            labels: ['Critical', 'High', 'Medium', 'Low'],
+            datasets: [{
+                data: [89, 234, 456, 221],
+                backgroundColor: ['#ff6b6b', '#feca57', '#48dbfb', '#1dd1a1']
+            }]
+        };
         new Chart(priorityCtx, {
             type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'High Impact, Low Effort',
-                    data: [{x: 8, y: 9}, {x: 7, y: 8}, {x: 9, y: 8}],
-                    backgroundColor: '#4ecdc4',
-                    borderColor: '#4ecdc4'
-                }, {
-                    label: 'High Impact, High Effort',
-                    data: [{x: 3, y: 9}, {x: 2, y: 8}, {x: 4, y: 9}],
-                    backgroundColor: '#667eea',
-                    borderColor: '#667eea'
-                }, {
-                    label: 'Low Impact, Low Effort',
-                    data: [{x: 8, y: 3}, {x: 9, y: 2}, {x: 7, y: 4}],
-                    backgroundColor: '#f5576c',
-                    borderColor: '#f5576c'
-                }, {
-                    label: 'Low Impact, High Effort',
-                    data: [{x: 2, y: 3}, {x: 3, y: 2}, {x: 1, y: 4}],
-                    backgroundColor: '#cccccc',
-                    borderColor: '#cccccc'
-                }]
-            },
+            data: priorityData,
             options: {
                 responsive: true,
                 scales: {
@@ -701,24 +751,25 @@
 
         // Impact Chart
         const impactCtx = document.getElementById('impactChart').getContext('2d');
+        const impactData = {
+            labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+            datasets: [{
+                label: 'Customer Satisfaction',
+                data: [72, 78, 85, 89],
+                backgroundColor: '#4ecdc4'
+            }, {
+                label: 'Feature Adoption Rate',
+                data: [45, 52, 67, 73],
+                backgroundColor: '#45b7d1'
+            }, {
+                label: 'Churn Reduction %',
+                data: [12, 18, 25, 31],
+                backgroundColor: '#96ceb4'
+            }]
+        };
         new Chart(impactCtx, {
             type: 'bar',
-            data: {
-                labels: ['CSAT Score', 'Feature Adoption', 'Customer Churn', 'Support Tickets', 'Revenue Retention'],
-                datasets: [{
-                    label: 'Before VoC',
-                    data: [3.2, 34, 15, 450, 100],
-                    backgroundColor: 'rgba(245, 87, 108, 0.7)',
-                    borderColor: '#f5576c',
-                    borderWidth: 2
-                }, {
-                    label: 'After VoC',
-                    data: [4.1, 57, 10, 312, 123],
-                    backgroundColor: 'rgba(102, 126, 234, 0.7)',
-                    borderColor: '#667eea',
-                    borderWidth: 2
-                }]
-            },
+            data: impactData,
             options: {
                 responsive: true,
                 plugins: {
@@ -822,7 +873,7 @@
         // Metric cards counter animation
         function animateCounters() {
             const counters = document.querySelectorAll('.metric-value');
-            const targets = ['12,847', '94%', '47', '23%'];
+            const targets = ['1,000', '87.3%', '847', '31%'];
             
             counters.forEach((counter, index) => {
                 const target = targets[index];
@@ -1001,6 +1052,4 @@
         console.log('🚀 Performance: All visualizations optimized for engagement');
     </script>
 </body>
-</html>animation = 'none';
-                    bar.offsetHeight; // Trigger reflow
-                    bar.style.
+</html>
