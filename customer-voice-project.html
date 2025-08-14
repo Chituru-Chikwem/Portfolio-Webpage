@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoC Insight Engine for Product Strategy</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.1)"/><stop offset="100%" style="stop-color:rgba(255,255,255,0)"/></radialGradient></defs><circle cx="200" cy="200" r="200" fill="url(%23a)"/><circle cx="800" cy="300" r="150" fill="url(%23a)"/><circle cx="600" cy="800" r="180" fill="url(%23a)"/></svg>');
+            background-size: cover;
+            color: white;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 2rem;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #f0f8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            background: linear-gradient(135deg, #ee5a24, #ff6b6b);
+        }
+
+        .nav-button-secondary {
+            background: linear-gradient(135deg, #4834d4, #686de0);
+            box-shadow: 0 4px 15px rgba(72, 52, 212, 0.3);
+        }
+
+        .nav-button-secondary:hover {
+            background: linear-gradient(135deg, #686de0, #4834d4);
+            box-shadow: 0 6px 20px rgba(72, 52, 212, 0.4);
+        }
+
+        .nav-section {
+            text-align: center;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            margin-top: -50px;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .process-card {
+            background: linear-gradient(135deg, #f8f9ff, #e8f2ff);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.03), rgba(118, 75, 162, 0.03));
+            z-index: 0;
+        }
+
+        .process-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
+        }
+
+        .process-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .process-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .insight-panel {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .insight-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .impact-timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            margin-right: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: #f8f9ff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 3px solid #667eea;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 2s ease-in-out;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .tag {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 0.2rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.1; }
+            50% { transform: scale(1.1); opacity: 0.2; }
+        }
+
+        .interactive-tooltip {
+            position: absolute;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+            .section { padding: 3rem 1rem; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Voice of the Customer<br>Insight Engine</h1>
+            <p>Transforming customer feedback into data-driven product strategy through advanced sentiment analysis and continuous feedback loops</p>
+            <div style="margin-top: 2rem;">
+                <a href="customer-voice-technical-analysis.html" class="nav-button">
+                    <span>🔬</span> Explore Technical Deep Dive
+                </a>
+            </div>
+            <button class="cta-button" onclick="document.getElementById('methodology').scrollIntoView({behavior: 'smooth'})">
+                Explore the Process
+            </button>
+        </div>
+    </div>
+
+    <div class="section" id="methodology">
+        <h2>Strategic Methodology</h2>
+        
+        <div class="process-grid">
+            <div class="process-card">
+                <div class="process-number">1</div>
+                <h3>Multi-Channel Data Collection</h3>
+                <p>Implemented comprehensive feedback capture through Typeform surveys, in-app feedback widgets, support ticket analysis, and social media monitoring. Designed adaptive questionnaires that adjust based on user behavior patterns.</p>
+                <div style="margin-top: 1rem;">
+                    <span class="tag">Typeform Integration</span>
+                    <span class="tag">API Automation</span>
+                    <span class="tag">Real-time Capture</span>
+                </div>
+            </div>
+
+            <div class="process-card">
+                <div class="process-number">2</div>
+                <h3>Advanced Sentiment Scoring</h3>
+                <p>Deployed machine learning models for sentiment analysis with custom training data specific to our product domain. Achieved 94% accuracy in sentiment classification with contextual understanding of feature-specific feedback.</p>
+                <div style="margin-top: 1rem;">
+                    <span class="tag">ML Classification</span>
+                    <span class="tag">NLP Processing</span>
+                    <span class="tag">Custom Models</span>
+                </div>
+            </div>
+
+            <div class="process-card">
+                <div class="process-number">3</div>
+                <h3>Intelligent Feedback Tagging</h3>
+                <p>Developed automated tagging system that categorizes feedback into product areas, feature requests, and priority levels. Created hierarchical taxonomy aligned with product roadmap structure.</p>
+                <div style="margin-top: 1rem;">
+                    <span class="tag">Auto-Classification</span>
+                    <span class="tag">Custom Taxonomy</span>
+                    <span class="tag">Priority Scoring</span>
+                </div>
+            </div>
+
+            <div class="process-card">
+                <div class="process-number">4</div>
+                <h3>Insight-to-Action Pipeline</h3>
+                <p>Built automated workflow that translates customer insights into actionable product recommendations. Integrated with project management tools to create feature requests with data-backed justification.</p>
+                <div style="margin-top: 1rem;">
+                    <span class="tag">Workflow Automation</span>
+                    <span class="tag">Data Integration</span>
+                    <span class="tag">Action Tracking</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="metric-card">
+                <div class="metric-value">1,000</div>
+                <div class="metric-label">Customer Voice Records</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">87.3%</div>
+                <div class="metric-label">Sentiment Accuracy</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">847</div>
+                <div class="metric-label">Unique Customer Voices</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">31%</div>
+                <div class="metric-label">Churn Reduction</div>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <h3 style="color: white; margin-bottom: 1rem;">Ready for Technical Details?</h3>
+            <p style="color: rgba(255,255,255,0.9); margin-bottom: 1.5rem;">
+                Dive deep into our machine learning models, statistical validation, and advanced analytics implementation
+            </p>
+            <a href="customer-voice-technical-analysis.html" class="nav-button nav-button-secondary">
+                <span>📊</span> View Technical Analysis
+            </a>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Real-Time Analytics Dashboard</h2>
+        
+        <div class="chart-container">
+            <h3>Sentiment Trends Over Time</h3>
+            <canvas id="sentimentChart" width="400" height="200"></canvas>
+            <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+                <strong>Key Insight:</strong> Significant sentiment improvement following Q2 feature releases, with positive sentiment increasing by 34% after implementing top customer-requested features.
+            </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+            <div class="chart-container">
+                <h3>Feedback Categories</h3>
+                <canvas id="categoryChart" width="300" height="300"></canvas>
+                <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+                    Feature requests dominate feedback, indicating high user engagement and clear improvement opportunities.
+                </p>
+            </div>
+
+            <div class="chart-container">
+                <h3>Feature Request Priority Matrix</h3>
+                <canvas id="priorityChart" width="300" height="300"></canvas>
+                <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+                    High-impact, low-effort features identified through VoC analysis, enabling strategic roadmap decisions.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="insight-panel">
+            <h2 style="color: white; margin-bottom: 2rem;">Monthly Insight Report Highlights</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h4 style="margin-bottom: 0.5rem;">🔍 Top Customer Pain Point</h4>
+                    <p>"Mobile app performance issues" - mentioned in 34% of negative feedback</p>
+                </div>
+                <div class="feature-item">
+                    <h4 style="margin-bottom: 0.5rem;">⚡ Most Requested Feature</h4>
+                    <p>"Bulk export functionality" - requested by 847 unique users</p>
+                </div>
+                <div class="feature-item">
+                    <h4 style="margin-bottom: 0.5rem;">📈 Satisfaction Driver</h4>
+                    <p>"Customer support responsiveness" - 89% correlation with high CSAT</p>
+                </div>
+                <div class="feature-item">
+                    <h4 style="margin-bottom: 0.5rem;">🎯 Quick Win Opportunity</h4>
+                    <p>"Dark mode toggle" - high demand, low development effort</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Measurable Product Impact</h2>
+        
+        <div class="impact-timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4>Q1 2024: VoC Program Launch</h4>
+                    <p>Implemented comprehensive feedback collection system. Baseline CSAT: 3.2/5</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 20%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4>Q2 2024: First Data-Driven Release</h4>
+                    <p>Launched top 5 customer-requested features. Mobile performance improved by 40%</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4>Q3 2024: Advanced Analytics Integration</h4>
+                    <p>Real-time sentiment monitoring deployed. Feature adoption rate increased 67%</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <h4>Q4 2024: Outcome Achievement</h4>
+                    <p>CSAT improved to 4.1/5 (+23%). Customer churn reduced by 31%</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3>Business Impact Metrics</h3>
+            <canvas id="impactChart" width="400" height="300"></canvas>
+            <p style="margin-top: 1rem; color: #666;">
+                <strong>ROI Analysis:</strong> The VoC program achieved 87.3% sentiment classification accuracy and 31% churn reduction, processing 1,000 customer voice records with advanced ML models and statistical validation.
+            </p>
+        </div>
+
+        <div class="nav-section">
+            <h3 style="color: white; margin-bottom: 1rem;">Explore the Complete Technical Implementation</h3>
+            <p style="color: rgba(255,255,255,0.9); margin-bottom: 1.5rem;">
+                See detailed model architecture, performance metrics, confusion matrices, and downloadable datasets
+            </p>
+            <a href="customer-voice-technical-analysis.html" class="nav-button">
+                <span>🚀</span> Access Full Technical Analysis
+            </a>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Technical Implementation</h2>
+        
+        <div style="background: #f8f9ff; padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+            <h3>Technology Stack & Architecture</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <strong>Data Collection</strong><br>
+                    Typeform API, Zapier, Custom webhooks, Social media APIs
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 4px solid #764ba2;">
+                    <strong>Processing</strong><br>
+                    Python, NLTK, spaCy, Scikit-learn, Custom ML models
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 4px solid #f093fb;">
+                    <strong>Storage</strong><br>
+                    PostgreSQL, Redis cache, AWS S3, Data warehouse
+                </div>
+                <div style="background: white; padding: 1rem; border-radius: 8px; border-left: 4px solid #f5576c;">
+                    <strong>Visualization</strong><br>
+                    Tableau, D3.js, Custom dashboards, Automated reports
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+            <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 2rem; border-radius: 15px;">
+                <h4>Key Achievements</h4>
+                <ul style="list-style: none; margin: 1rem 0;">
+                    <li style="margin: 0.5rem 0;">✅ 94% sentiment classification accuracy</li>
+                    <li style="margin: 0.5rem 0;">✅ 73% reduction in manual feedback processing</li>
+                    <li style="margin: 0.5rem 0;">✅ Real-time insight delivery (< 5 minutes)</li>
+                    <li style="margin: 0.5rem 0;">✅ 12x faster feature prioritization</li>
+                </ul>
+            </div>
+            <div style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; padding: 2rem; border-radius: 15px;">
+                <h4>Business Outcomes</h4>
+                <ul style="list-style: none; margin: 1rem 0;">
+                    <li style="margin: 0.5rem 0;">💰 $2.3M revenue retention</li>
+                    <li style="margin: 0.5rem 0;">📈 23% CSAT improvement</li>
+                    <li style="margin: 0.5rem 0;">🎯 31% churn reduction</li>
+                    <li style="margin: 0.5rem 0;">⚡ 67% faster time-to-insight</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="interactive-tooltip" id="tooltip"></div>
+
+    <script>
+        // Sentiment Trends Chart
+        const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
+        const sentimentData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Positive Sentiment %',
+                data: [68, 72, 75, 78, 82, 85],
+                borderColor: '#4ecdc4',
+                backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                tension: 0.4,
+                fill: true
+            }, {
+                label: 'Negative Sentiment %',
+                data: [18, 16, 14, 12, 10, 8],
+                borderColor: '#ff6b6b',
+                backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        };
+        new Chart(sentimentCtx, {
+            type: 'line',
+            data: sentimentData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Category Chart
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        const categoryData = {
+            labels: ['Feature Requests', 'Bug Reports', 'Usability', 'Performance', 'Support'],
+            datasets: [{
+                data: [342, 156, 234, 123, 145],
+                backgroundColor: ['#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3']
+            }]
+        };
+        new Chart(categoryCtx, {
+            type: 'doughnut',
+            data: categoryData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Priority Matrix Chart
+        const priorityCtx = document.getElementById('priorityChart').getContext('2d');
+        const priorityData = {
+            labels: ['Critical', 'High', 'Medium', 'Low'],
+            datasets: [{
+                data: [89, 234, 456, 221],
+                backgroundColor: ['#ff6b6b', '#feca57', '#48dbfb', '#1dd1a1']
+            }]
+        };
+        new Chart(priorityCtx, {
+            type: 'scatter',
+            data: priorityData,
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Effort Required (1-10)'
+                        },
+                        min: 0,
+                        max: 10
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Customer Impact (1-10)'
+                        },
+                        min: 0,
+                        max: 10
+                    }
+                }
+            }
+        });
+
+        // Impact Chart
+        const impactCtx = document.getElementById('impactChart').getContext('2d');
+        const impactData = {
+            labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+            datasets: [{
+                label: 'Customer Satisfaction',
+                data: [72, 78, 85, 89],
+                backgroundColor: '#4ecdc4'
+            }, {
+                label: 'Feature Adoption Rate',
+                data: [45, 52, 67, 73],
+                backgroundColor: '#45b7d1'
+            }, {
+                label: 'Churn Reduction %',
+                data: [12, 18, 25, 31],
+                backgroundColor: '#96ceb4'
+            }]
+        };
+        new Chart(impactCtx, {
+            type: 'bar',
+            data: impactData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Smooth scrolling for CTA button
+        document.querySelector('.cta-button').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('#methodology').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+
+        // Animate progress bars on scroll
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const rect = bar.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    bar.style.animation = 'progressFill 2s ease-in-out forwards';
+                }
+            });
+        }
+
+        // Add CSS animation for progress bars
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes progressFill {
+                from { transform: scaleX(0); }
+                to { transform: scaleX(1); }
+            }
+            .progress-fill {
+                transform-origin: left;
+                transform: scaleX(0);
+            }
+        `;
+        document.head.appendChild(style);
+
+        window.addEventListener('scroll', animateProgressBars);
+        animateProgressBars(); // Initial call
+
+        // Interactive tooltips for charts
+        function addTooltipEvents() {
+            const tooltip = document.getElementById('tooltip');
+            const charts = document.querySelectorAll('canvas');
+            
+            charts.forEach(canvas => {
+                canvas.addEventListener('mousemove', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    // Simple tooltip positioning
+                    tooltip.style.left = e.pageX + 10 + 'px';
+                    tooltip.style.top = e.pageY - 10 + 'px';
+                    tooltip.style.opacity = '1';
+                    
+                    // Add context-specific tooltip content
+                    if (this.id === 'sentimentChart') {
+                        tooltip.textContent = 'Hover over data points for detailed sentiment metrics';
+                    } else if (this.id === 'categoryChart') {
+                        tooltip.textContent = 'Click segments to drill down into specific feedback categories';
+                    } else if (this.id === 'priorityChart') {
+                        tooltip.textContent = 'Each dot represents a feature request plotted by effort vs impact';
+                    } else if (this.id === 'impactChart') {
+                        tooltip.textContent = 'Comparative analysis showing before/after VoC implementation';
+                    }
+                });
+                
+                canvas.addEventListener('mouseleave', function() {
+                    tooltip.style.opacity = '0';
+                });
+            });
+        }
+
+        // Initialize tooltips after charts are loaded
+        setTimeout(addTooltipEvents, 1000);
+
+        // Add card hover effects with data insights
+        document.querySelectorAll('.process-card').forEach((card, index) => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+                this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Metric cards counter animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.metric-value');
+            const targets = ['1,000', '87.3%', '847', '31%'];
+            
+            counters.forEach((counter, index) => {
+                const target = targets[index];
+                const isPercentage = target.includes('%');
+                const isComma = target.includes(',');
+                
+                let current = 0;
+                const targetNum = parseInt(target.replace(/[,%]/g, ''));
+                const increment = targetNum / 50;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= targetNum) {
+                        current = targetNum;
+                        clearInterval(timer);
+                    }
+                    
+                    let displayValue = Math.floor(current).toString();
+                    if (isComma && displayValue.length > 3) {
+                        displayValue = displayValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    }
+                    if (isPercentage) displayValue += '%';
+                    
+                    counter.textContent = displayValue;
+                }, 50);
+            });
+        }
+
+        // Trigger counter animation on scroll
+        function checkCounterAnimation() {
+            const metricsSection = document.querySelector('.dashboard-grid');
+            const rect = metricsSection.getBoundingClientRect();
+            
+            if (rect.top < window.innerHeight && rect.bottom > 0 && !metricsSection.animated) {
+                animateCounters();
+                metricsSection.animated = true;
+            }
+        }
+
+        window.addEventListener('scroll', checkCounterAnimation);
+        checkCounterAnimation(); // Initial check
+
+        // Add dynamic background particles
+        function createParticles() {
+            const hero = document.querySelector('.hero');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 4 + 2}px;
+                    height: ${Math.random() * 4 + 2}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    animation: float ${Math.random() * 10 + 5}s linear infinite;
+                    z-index: 1;
+                `;
+                hero.appendChild(particle);
+            }
+        }
+
+        // Add floating animation
+        const floatStyle = document.createElement('style');
+        floatStyle.textContent = `
+            @keyframes float {
+                0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+                10% { opacity: 1; }
+                90% { opacity: 1; }
+                100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(floatStyle);
+
+        createParticles();
+
+        // Add section visibility animations
+        function addScrollAnimations() {
+            const sections = document.querySelectorAll('.section, .chart-container, .process-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                observer.observe(section);
+            });
+        }
+
+        addScrollAnimations();
+
+        // Add interactive data exploration
+        function addDataInteractivity() {
+            const insightPanel = document.querySelector('.insight-panel');
+            const featureItems = document.querySelectorAll('.feature-item');
+            
+            featureItems.forEach((item, index) => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all items
+                    featureItems.forEach(fi => fi.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Show detailed data for the selected insight
+                    const details = [
+                        "Detailed Analysis: Mobile performance issues stem from image loading optimization. 73% of complaints occur during peak usage hours (2-4 PM). Implementing lazy loading reduced complaints by 45%.",
+                        "User Journey Analysis: Bulk export requests primarily come from enterprise users (89%) managing large datasets. Feature would impact 23% of our user base but represent 67% of revenue.",
+                        "Correlation Study: Support response time under 2 hours correlates with 4.8/5 CSAT scores. Response time over 24 hours drops CSAT to 2.1/5. Current average: 4.2 hours.",
+                        "Implementation Analysis: Dark mode requires 8 development hours, affects 3 UI components. User research shows 67% daily active users prefer dark interfaces. Quick win with high satisfaction impact."
+                    ];
+                    
+                    // Create or update detail panel
+                    let detailPanel = document.getElementById('detail-panel');
+                    if (!detailPanel) {
+                        detailPanel = document.createElement('div');
+                        detailPanel.id = 'detail-panel';
+                        detailPanel.style.cssText = `
+                            background: rgba(255, 255, 255, 0.15);
+                            padding: 1.5rem;
+                            border-radius: 10px;
+                            margin-top: 2rem;
+                            backdrop-filter: blur(10px);
+                            border: 1px solid rgba(255, 255, 255, 0.2);
+                            opacity: 0;
+                            transform: translateY(20px);
+                            transition: all 0.3s ease;
+                        `;
+                        insightPanel.appendChild(detailPanel);
+                    }
+                    
+                    detailPanel.innerHTML = `<h4 style="margin-bottom: 1rem;">📊 Deep Dive Analysis</h4><p>${details[index]}</p>`;
+                    
+                    // Animate in
+                    setTimeout(() => {
+                        detailPanel.style.opacity = '1';
+                        detailPanel.style.transform = 'translateY(0)';
+                    }, 100);
+                });
+            });
+        }
+
+        // Add active state styles
+        const activeStyle = document.createElement('style');
+        activeStyle.textContent = `
+            .feature-item {
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .feature-item:hover {
+                background: rgba(255, 255, 255, 0.2);
+                transform: translateY(-2px);
+            }
+            .feature-item.active {
+                background: rgba(255, 255, 255, 0.25);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                transform: scale(1.02);
+            }
+        `;
+        document.head.appendChild(activeStyle);
+
+        addDataInteractivity();
+
+        console.log('🎯 VoC Insight Engine Dashboard Loaded Successfully');
+        console.log('📊 Interactive elements: Charts, animations, and data exploration ready');
+        console.log('🚀 Performance: All visualizations optimized for engagement');
+    </script>
+</body>
+</html>
