@@ -27,6 +27,85 @@
             padding: 20px;
         }
 
+        /* Added navigation button styles */
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.3);
+            background: linear-gradient(135deg, #0056b3, #0099cc);
+        }
+
+        .nav-button-large {
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            border-radius: 15px;
+        }
+
+        .nav-button-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 123, 255, 0.3);
+        }
+
+        .nav-button-secondary:hover {
+            background: rgba(0, 123, 255, 0.2);
+            border-color: rgba(0, 123, 255, 0.5);
+        }
+
+        .nav-section {
+            text-align: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-section h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .nav-section p {
+            color: #b8c5d1;
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         .hero {
             text-align: center;
             padding: 80px 0;
@@ -324,6 +403,16 @@
             .insights-grid {
                 grid-template-columns: 1fr;
             }
+
+            .nav-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .nav-button-large {
+                padding: 14px 28px;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -333,6 +422,14 @@
             <h1>Cross-Market Product Opportunity Mapping</h1>
             <p>Strategic Fintech Expansion Framework for African Markets</p>
             <p style="font-size: 1rem; margin-top: 20px; opacity: 0.8;">Leveraging telco insights, B2B fintech experience, and multi-country procurement expertise</p>
+            
+            <!-- Added hero navigation button -->
+            <div style="margin-top: 30px;">
+                <a href="cross-market-technical-analysis.html" class="nav-button nav-button-large">
+                    <span>🔬</span>
+                    <span>Explore Technical Analysis</span>
+                </a>
+            </div>
         </section>
 
         <div class="metrics-grid">
@@ -354,6 +451,16 @@
             </div>
         </div>
 
+        <!-- Added navigation section after metrics -->
+        <div class="nav-section">
+            <h3>Deep Dive into Our Methodology</h3>
+            <p>Discover the comprehensive technical framework behind our market analysis, including data collection methods, scoring algorithms, and validation processes.</p>
+            <a href="cross-market-technical-analysis.html" class="nav-button">
+                <span>📊</span>
+                <span>View Technical Deep Dive</span>
+            </a>
+        </div>
+
         <section class="section">
             <h2 class="section-title">Market Readiness Heatmap</h2>
             <div class="chart-container">
@@ -371,6 +478,14 @@
                         <div style="width: 20px; height: 10px; background: #00b894; border-radius: 2px;"></div>
                     </div>
                     <span style="font-size: 0.9rem; color: #b8c5d1;">High Opportunity</span>
+                </div>
+                
+                <!-- Added navigation button within chart container -->
+                <div style="text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                    <a href="cross-market-technical-analysis.html" class="nav-button nav-button-secondary">
+                        <span>⚡</span>
+                        <span>Interactive Market Analysis</span>
+                    </a>
                 </div>
             </div>
         </section>
@@ -453,6 +568,14 @@
                         <p style="color: #b8c5d1; font-size: 0.9rem;">Small market but excellent regulatory environment and rapid digitalization</p>
                     </div>
                 </div>
+
+                <!-- Added navigation button within dashboard -->
+                <div style="text-align: center; margin-top: 30px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                    <a href="cross-market-technical-analysis.html" class="nav-button">
+                        <span>🎯</span>
+                        <span>Advanced Analytics & Modeling</span>
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -522,6 +645,25 @@
                 </div>
             </div>
         </section>
+
+        <!-- Added final call-to-action navigation section -->
+        <div class="nav-section" style="margin-top: 80px;">
+            <h3>Ready for Technical Deep Dive?</h3>
+            <p>Explore our comprehensive technical analysis including data collection methodology, composite scoring algorithms, Monte Carlo risk simulations, and interactive market opportunity calculators.</p>
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 25px;">
+                <a href="cross-market-technical-analysis.html" class="nav-button nav-button-large">
+                    <span>🚀</span>
+                    <span>Launch Technical Analysis</span>
+                </a>
+                <a href="cross-market-technical-analysis.html#interactive-demo" class="nav-button nav-button-secondary">
+                    <span>⚡</span>
+                    <span>Try Interactive Demo</span>
+                </a>
+            </div>
+            <p style="font-size: 0.85rem; color: #888; margin-top: 15px; font-style: italic;">
+                Note: cross-market-technical-analysis.html must be present in the same directory for navigation to work
+            </p>
+        </div>
     </div>
 
     <script>
