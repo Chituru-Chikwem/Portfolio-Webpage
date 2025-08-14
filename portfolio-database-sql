@@ -1,0 +1,99 @@
+-- 1. Dataset Overview and Basic Statistics
+SELECT 
+    COUNT(*) as total_applications,
+    AVG(CAST(monthly_revenue AS FLOAT)) as avg_monthly_revenue,
+    AVG(CAST(years_in_business AS FLOAT)) as avg_years_in_business,
+    AVG(CAST(owner_age AS FLOAT)) as avg_owner_age,
+    COUNT(CASE WHEN has_bank_account = 1 THEN 1 END) as businesses_with_bank_accounts,
+    AVG(CAST(mobile_money_frequency AS FLOAT)) as avg_mobile_frequency
+FROM sme_credit_scoring_dataset;
+
+-- 2. Gender Bias Analysis
+SELECT 
+    owner_gender,
+    COUNT(*) as total_applications,
+    AVG(CAST(traditional_approval AS FLOAT)) * 100 as traditional_approval_rate,
+    AVG(CAST(ai_approval AS FLOAT)) * 100 as ai_approval_rate,
+    AVG(CAST(actually_creditworthy AS FLOAT)) * 100 as actual_creditworthy_rate,
+    (AVG(CAST(ai_approval AS FLOAT)) - AVG(CAST(traditional_approval AS FLOAT))) * 100 as improvement_percentage
+FROM sme_credit_scoring_dataset
+GROUP BY owner_gender;
+
+-- 3. Location Bias Analysis
+SELECT 
+    location_type,
+    COUNT(*) as total_applications,
+    AVG(CAST(traditional_approval AS FLOAT)) * 100 as traditional_approval_rate,
+    AVG(CAST(ai_approval AS FLOAT)) * 100 as ai_approval_rate,
+    AVG(CAST(actually_creditworthy AS FLOAT)) * 100 as actual_creditworthy_rate
+FROM sme_credit_scoring_dataset
+GROUP BY location_type;
+
+-- 4. Business Type Performance Analysis
+SELECT 
+    business_type,
+    COUNT(*) as applications,
+    AVG(CAST(traditional_approval AS FLOAT)) * 100 as traditional_rate,
+    AVG(CAST(ai_approval AS FLOAT)) * 100 as ai_rate,
+    AVG(CAST(actually_creditworthy AS FLOAT)) * 100 as actual_rate,
+    AVG(CAST(monthly_revenue AS FLOAT)) as avg_revenue,
+    AVG(CAST(mobile_money_frequency AS FLOAT)) as avg_mobile_usage
+FROM sme_credit_scoring_dataset
+GROUP BY business_type
+ORDER BY ai_rate DESC;
+
+-- 5. Key Metrics Calculation
+SELECT 
+    -- Overall approval rates
+    AVG(CAST(traditional_approval AS FLOAT)) * 100 as traditional_overall_rate,
+    AVG(CAST(ai_approval AS FLOAT)) * 100 as ai_overall_rate,
+    
+    -- Gender bias calculation
+    (SELECT AVG(CAST(traditional_approval AS FLOAT)) FROM sme_credit_scoring_dataset WHERE owner_gender = 'male') * 100 -
+    (SELECT AVG(CAST(traditional_approval AS FLOAT)) FROM sme_credit_scoring_dataset WHERE owner_gender = 'female') * 100 as traditional_gender_gap,
+    
+    (SELECT AVG(CAST(ai_approval AS FLOAT)) FROM sme_credit_scoring_dataset WHERE owner_gender = 'male') * 100 -
+    (SELECT AVG(CAST(ai_approval AS FLOAT)) FROM sme_credit_scoring_dataset WHERE owner_gender = 'female') * 100 as ai_gender_gap,
+    
+    -- Women-led business improvement
+    ((SELECT AVG(CAST(ai_approval AS FLOAT)) FROM sme_credit_scoring_dataset WHERE owner_gender = 'female') -
+     (SELECT AVG(CAST(traditional_approval AS FLOAT)) FROM sme_credit_scoring_dataset WHERE owner_gender = 'female')) * 100 as women_improvement_percentage
+FROM sme_credit_scoring_dataset;
+
+-- 6. Mobile Money Impact Analysis
+SELECT 
+    CASE 
+        WHEN CAST(mobile_money_frequency AS FLOAT) >= 50 THEN 'High Usage'
+        WHEN CAST(mobile_money_frequency AS FLOAT) >= 20 THEN 'Medium Usage'
+        ELSE 'Low Usage'
+    END as mobile_usage_category,
+    COUNT(*) as businesses,
+    AVG(CAST(traditional_approval AS FLOAT)) * 100 as traditional_rate,
+    AVG(CAST(ai_approval AS FLOAT)) * 100 as ai_rate,
+    AVG(CAST(actually_creditworthy AS FLOAT)) * 100 as actual_creditworthy_rate
+FROM sme_credit_scoring_dataset
+GROUP BY 
+    CASE 
+        WHEN CAST(mobile_money_frequency AS FLOAT) >= 50 THEN 'High Usage'
+        WHEN CAST(mobile_money_frequency AS FLOAT) >= 20 THEN 'Medium Usage'
+        ELSE 'Low Usage'
+    END;
+
+-- 7. Portfolio Quality Analysis
+SELECT 
+    'Traditional Model' as model_type,
+    COUNT(CASE WHEN traditional_approval = 1 THEN 1 END) as approved_applications,
+    COUNT(CASE WHEN traditional_approval = 1 AND actually_creditworthy = 1 THEN 1 END) as good_approvals,
+    (COUNT(CASE WHEN traditional_approval = 1 AND actually_creditworthy = 1 THEN 1 END) * 100.0 / 
+     NULLIF(COUNT(CASE WHEN traditional_approval = 1 THEN 1 END), 0)) as portfolio_quality
+FROM sme_credit_scoring_dataset
+
+UNION ALL
+
+SELECT 
+    'AI Model' as model_type,
+    COUNT(CASE WHEN ai_approval = 1 THEN 1 END) as approved_applications,
+    COUNT(CASE WHEN ai_approval = 1 AND actually_creditworthy = 1 THEN 1 END) as good_approvals,
+    (COUNT(CASE WHEN ai_approval = 1 AND actually_creditworthy = 1 THEN 1 END) * 100.0 / 
+     NULLIF(COUNT(CASE WHEN ai_approval = 1 THEN 1 END), 0)) as portfolio_quality
+FROM sme_credit_scoring_dataset;
